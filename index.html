@@ -798,6 +798,32 @@ function subjectStats(sub){
   return { mastered:m, total:all.length, pct: all.length ? Math.round(m/all.length*100) : 0 };
 }
 
+/* ---- quiet progress logging to a private Google Sheet (off until LOG_URL is set) ---- */
+var LOG_URL = "https://script.google.com/macros/s/AKfycbwbxuoflSRQhVmmUpswgCeBVRngv2RyaRvls3T8GT1YHhCmBAFd27HoBo9_xbbBwr9a/exec";
+var LOG_KEY = "alexfinals";  // simple shared secret, must match the Apps Script
+function studySession(){
+  try {
+    var s = localStorage.getItem("studySession");
+    if(!s){ s = Date.now().toString(36) + Math.random().toString(36).slice(2,8); localStorage.setItem("studySession", s); }
+    return s;
+  } catch(e){ return "na"; }
+}
+function logEvent(event, extra){
+  if(!LOG_URL) return;
+  try {
+    var bio = subjectStats("biology"), eng = subjectStats("english"), hea = subjectStats("health"), cur = subjectStats(current);
+    var payload = {
+      key: LOG_KEY, student: "Alex", event: event, subject: DATA[current].name,
+      subjectMastered: cur.mastered, subjectTotal: cur.total,
+      overallMastered: bio.mastered + eng.mastered + hea.mastered,
+      overallTotal: bio.total + eng.total + hea.total,
+      session: studySession()
+    };
+    if(extra){ for(var k in extra){ payload[k] = extra[k]; } }
+    fetch(LOG_URL, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+  } catch(e){}
+}
+
 function subjectCards(sub){
   var out = [];
   DATA[sub].units.forEach(function(u, ui){
@@ -925,7 +951,11 @@ function practiceRound(){
   $("#gotBtn").addEventListener("click", function(){ setMastered(c.id, true); roundGot++; streak++; advanceRound(); });
   $("#missBtn").addEventListener("click", function(){ setMastered(c.id, false); streak = 0; advanceRound(); });
 }
-function advanceRound(){ rpos++; if(rpos >= round.length) pstate = "win"; renderPractice(); }
+function advanceRound(){
+  rpos++;
+  if(rpos >= round.length){ pstate = "win"; logEvent("round_complete", { roundScore: roundGot + "/" + round.length }); }
+  renderPractice();
+}
 function practiceWin(){
   var st = subjectStats(current);
   var msgs = ["Nice, that round is done.", "That counts. Good work.", "Every round adds up.", "You showed up. That matters."];
@@ -1020,6 +1050,7 @@ window.addEventListener("beforeprint", function(){
 buildUnitSelect();
 document.documentElement.style.setProperty("--accent", DATA[current].color);
 render();
+try { if(!sessionStorage.getItem("opened")){ sessionStorage.setItem("opened","1"); logEvent("app_open"); } } catch(e){ logEvent("app_open"); }
 </script>
 </body>
 </html>
