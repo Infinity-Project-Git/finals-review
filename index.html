@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Final Exam Study Guide</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --card:#ffffff; --ink:#1a1f24; --muted:#55606b;
+    --line:#d8dee4; --accent:#1d6fb8; --accent2:#0f5a98;
+    --bio:#227548; --eng:#7a4fc0; --hea:#b54b35;
+    --good:#1e7d4f; --review:#b5481f; --tipbg:#fff6e0; --tipink:#5c4708; --tipline:#e8c45a;
+    --whybg:#eef4fb; --whyink:#1f3b54; --whyline:#bcd6ef;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5; -webkit-text-size-adjust:100%;}
+  header{position:sticky; top:0; z-index:20; background:var(--card); border-bottom:1px solid var(--line);
+    box-shadow:0 1px 6px rgba(0,0,0,.06);}
+  .wrap{max-width:880px; margin:0 auto; padding:0 16px;}
+  h1{font-size:18px; margin:10px 0 2px; letter-spacing:.2px;}
+  .sub{font-size:12.5px; color:var(--muted); margin:0 0 8px;}
+  .tabs{display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap;}
+  .tab{flex:1; min-width:90px; border:1px solid var(--line); background:#fff; color:var(--ink);
+    padding:9px 8px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; text-align:center;}
+  .tab[data-s="biology"].on{background:var(--bio); border-color:var(--bio); color:#fff;}
+  .tab[data-s="english"].on{background:var(--eng); border-color:var(--eng); color:#fff;}
+  .tab[data-s="health"].on{background:var(--hea); border-color:var(--hea); color:#fff;}
+  .controls{display:flex; gap:6px; align-items:center; flex-wrap:wrap; padding-bottom:10px;}
+  .modes{display:flex; gap:4px; background:#eef1f4; border-radius:10px; padding:3px;}
+  .mode{border:none; background:transparent; padding:7px 12px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; color:var(--muted);}
+  .mode.on{background:#fff; color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.12);}
+  select{font-size:13px; padding:7px 8px; border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); max-width:55%;}
+  .btn{border:1px solid var(--line); background:#fff; color:var(--ink); padding:7px 11px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer;}
+  .btn.print{margin-left:auto;}
+  main{max-width:880px; margin:0 auto; padding:14px 16px 80px;}
+  .intro{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px;font-size:14px;color:var(--muted);}
+  .intro b{color:var(--ink);}
+
+  /* Study / answer-key view */
+  .unit{margin-bottom:14px;}
+  .unit-h{display:flex; align-items:center; gap:8px; cursor:pointer; background:#fff; border:1px solid var(--line);
+    border-radius:11px; padding:12px 14px; font-weight:700; font-size:15px;}
+  .unit-h .chev{margin-left:auto; transition:transform .15s; color:var(--muted); font-size:13px;}
+  .unit.closed .chev{transform:rotate(-90deg);}
+  .unit.closed .unit-body{display:none;}
+  .unit-body{padding:6px 2px 2px;}
+  .qa{background:#fff; border:1px solid var(--line); border-radius:11px; padding:13px 15px; margin:9px 0;}
+  .qa .q{font-weight:650; margin:0 0 6px;}
+  .qa .q .num{color:var(--accent2); font-weight:700;}
+  .qa .a{margin:0;}
+  .qa .a .lead{font-weight:600;}
+  .callout{margin-top:9px; padding:8px 11px; border-radius:9px; font-size:13.5px;}
+  .why{background:var(--whybg); border-left:3px solid var(--whyline); color:var(--whyink);}
+  .tip{background:var(--tipbg); border-left:3px solid var(--tipline); color:var(--tipink);}
+  .callout .tag{font-weight:700; text-transform:uppercase; font-size:10.5px; letter-spacing:.7px; opacity:.8; display:block; margin-bottom:2px;}
+  table.grid{border-collapse:collapse; margin:8px 0; font-size:13px; width:100%;}
+  table.grid td,table.grid th{border:1px solid var(--line); padding:6px 8px; text-align:center;}
+  table.grid th{background:#eef1f4;}
+  .punnett td{font-weight:600;}
+  ul.tight{margin:4px 0 0; padding-left:20px;}
+  ul.tight li{margin:2px 0;}
+
+  /* Flashcards */
+  .fc-wrap{display:flex; flex-direction:column; align-items:center; gap:14px;}
+  .fc-count{font-size:13px; color:var(--muted);}
+  .flashcard{width:100%; min-height:300px; perspective:1200px; cursor:pointer;}
+  .fc-inner{position:relative; width:100%; min-height:300px; transition:transform .5s; transform-style:preserve-3d;}
+  .flashcard.flip .fc-inner{transform:rotateY(180deg);}
+  .fc-face{position:absolute; inset:0; backface-visibility:hidden; background:#fff; border:1px solid var(--line);
+    border-radius:16px; padding:24px; display:flex; flex-direction:column; justify-content:center; box-shadow:0 3px 12px rgba(0,0,0,.07);}
+  .fc-face .lbl{position:absolute; top:12px; left:16px; font-size:10.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--muted); font-weight:700;}
+  .fc-front .text{font-size:18px; font-weight:600; text-align:center;}
+  .fc-back{transform:rotateY(180deg); overflow-y:auto;}
+  .fc-back .text{font-size:15.5px;}
+  .fc-nav{display:flex; gap:8px; width:100%;}
+  .fc-nav .btn{flex:1; padding:12px;}
+  .tap-hint{font-size:12px; color:var(--muted); text-align:center;}
+
+  /* Quiz */
+  .quiz-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:13px; color:var(--muted);}
+  .scorebar{height:7px; background:#e4e8ec; border-radius:99px; overflow:hidden; margin-bottom:14px;}
+  .scorebar i{display:block; height:100%; background:var(--accent); width:0;}
+  .qcard{background:#fff; border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .qcard .qtext{font-size:17px; font-weight:600; margin:0 0 16px;}
+  .qcard .answer{font-size:15px; border-top:1px dashed var(--line); padding-top:14px; margin-top:4px; display:none;}
+  .qcard.revealed .answer{display:block;}
+  .qbtns{display:flex; gap:8px; margin-top:16px;}
+  .qbtns .btn{flex:1; padding:12px;}
+  .btn.good{background:var(--good); color:#fff; border-color:var(--good);}
+  .btn.rev{background:var(--review); color:#fff; border-color:var(--review);}
+  .btn.big{width:100%; padding:13px; font-size:15px;}
+  .done{background:#fff; border:1px solid var(--line); border-radius:14px; padding:28px 20px; text-align:center;}
+  .done .big-num{font-size:40px; font-weight:800; color:var(--accent);}
+  .hide{display:none !important;}
+
+  /* Practice: low-friction, AuDHD-friendly */
+  .hero{background:#fff; border:1px solid var(--line); border-radius:18px; padding:26px 20px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,.06);}
+  .ring{display:block; margin:2px auto 0;}
+  .hero h2{margin:14px 0 2px; font-size:19px;}
+  .hero .stat{color:var(--muted); font-size:14px; margin:0 0 20px;}
+  .start-btn{display:block; width:100%; border:none; border-radius:15px; padding:18px 16px; font-size:18px; font-weight:800; color:#fff; cursor:pointer; background:var(--accent); box-shadow:0 5px 16px rgba(0,0,0,.14);}
+  .start-btn small{display:block; font-size:13px; font-weight:600; margin-top:3px;}
+  .lowkey{color:var(--muted); font-size:13px; margin:16px 4px 0; line-height:1.5;}
+  .hero-opts{display:flex; gap:8px; margin-top:16px;}
+  .hero-opts .btn{flex:1;}
+  .reset-link{display:inline-block; margin-top:16px; color:var(--muted); font-size:12px; text-decoration:underline; cursor:pointer; background:none; border:none;}
+  .streak{display:inline-block; background:#fff4e0; color:#8a4b00; border:1px solid #efc06a; border-radius:99px; padding:3px 11px; font-size:13px; font-weight:700;}
+  .round-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; min-height:28px;}
+  .dotrow{display:flex; gap:7px;}
+  .dotrow i{width:10px; height:10px; border-radius:99px; background:#dde3e8; display:block;}
+  .dotrow i.on{background:var(--accent);}
+  .dotrow i.now{box-shadow:0 0 0 3px rgba(0,0,0,.07);}
+  .winscreen{background:#fff; border:1px solid var(--line); border-radius:18px; padding:30px 22px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,.06);}
+  .win-check{width:66px; height:66px; border-radius:99px; background:var(--good); color:#fff; font-size:34px; line-height:66px; margin:0 auto 12px;}
+  .win-h{font-size:22px; font-weight:800; margin:0 0 4px;}
+  .win-msg{color:var(--muted); font-size:15px; margin:0 0 8px;}
+  .win-stat{font-size:14px; margin:12px 0 18px;}
+  .win-stat b{color:var(--ink);}
+  .winscreen .btn{margin-top:8px;}
+  .youranswer{display:inline-block; background:#fdf0d8; color:#7a5500; border:1px solid #ecca7e; border-radius:7px; padding:1px 7px; font-size:11px; font-weight:800; letter-spacing:.4px; margin-bottom:6px;}
+
+  /* Print: clean answer packet */
+  .print-only{display:none;}
+  @media print{
+    header,.controls,.intro,.btn,.modes{display:none !important;}
+    body{background:#fff;}
+    main{padding:0; max-width:none;}
+    #screen-views{display:block !important;}
+    #practice-view,#flash-view{display:none !important;}
+    #answers-view{display:block !important;}
+    .unit.closed .unit-body{display:block !important;}
+    .unit.closed .chev{display:none;}
+    .qa,.unit-h{box-shadow:none; break-inside:avoid; page-break-inside:avoid;}
+    .qa{border-color:#bbb;}
+    .print-title{display:block !important; font-size:20px; font-weight:800; margin:0 0 2px;}
+    .print-sub{display:block !important; color:#444; font-size:12px; margin-bottom:12px;}
+    .callout{border-left-width:3px;}
+    .unit-h{background:#f0f0f0 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+    a{color:#000; text-decoration:none;}
+    .pagebreak{page-break-before:always;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1 id="head-title">Final Exam Study Guide</h1>
+    <p class="sub" id="head-sub">Pick a subject. Do one short round whenever you can. No pressure, every round counts.</p>
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-s="biology">Biology</button>
+      <button class="tab" data-s="english">English 9</button>
+      <button class="tab" data-s="health">Health</button>
+    </div>
+    <div class="controls">
+      <div class="modes" id="modes">
+        <button class="mode on" data-m="practice">Practice</button>
+        <button class="mode" data-m="flash">Flashcards</button>
+        <button class="mode" data-m="answers">Answers</button>
+      </div>
+      <select id="unitSel"></select>
+      <button class="btn print" onclick="window.print()">Print / PDF</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="intro" id="intro">
+    <b>Just start one quick round.</b> Five questions, about two minutes. Do one and you are done, that counts. Want more? Keep going. <b>Flashcards</b> let you flip at your own pace, and <b>Answers</b> is the full key (good for printing, or for someone to quiz you).
+    <br><br>A few questions are about your own work (your project drug, your own coping ideas). Those are tagged <b>YOUR ANSWER</b>, only you can fill those in.
+  </div>
+
+  <span class="print-title print-only" id="print-title"></span>
+  <span class="print-sub print-only" id="print-sub"></span>
+
+  <div id="screen-views">
+    <div id="practice-view"></div>
+    <div id="flash-view" class="hide"></div>
+    <div id="answers-view" class="hide"></div>
+  </div>
+</main>
+
+<script>
+/* ============================ CONTENT ============================ */
+/* Each card: q (question), a (answer). Optional: why (reasoning), tip (memory trick). */
+
+const DATA = {
+  biology: {
+    name: "Biology", label: "Biology, 2nd Semester Exam", color: "#227548",
+    units: [
+      { name: "Unit 3: Cell Respiration", cards: [
+        { q:"What is the purpose of cellular respiration?",
+          a:"To break down glucose (sugar from food) and convert its stored energy into ATP, the usable energy that powers the cell.",
+          why:"Food energy is locked in glucose. Cells cannot use glucose directly, so respiration transfers that energy into ATP." },
+        { q:"Write the equation for cellular respiration.",
+          a:"Glucose + Oxygen produces Carbon Dioxide + Water + Energy (ATP).  In symbols: C6H12O6 + 6O2 produces 6CO2 + 6H2O + ATP.",
+          tip:"It is photosynthesis run backwards. Sugar + oxygen goes in, CO2 + water + energy comes out." },
+        { q:"Which organelle does most of cellular respiration occur in?",
+          a:"The mitochondria (the Krebs cycle and electron transport chain happen here). Glycolysis, the first step, happens in the cytoplasm.",
+          tip:"Mitochondria = the powerhouse of the cell." },
+        { q:"The 3 stages of cellular respiration: where, why, inputs, outputs, aerobic or anaerobic?",
+          a:"GLYCOLYSIS: in the cytoplasm. Splits glucose into 2 pyruvate. Uses glucose. Makes 2 ATP + pyruvate + NADH. Anaerobic (no oxygen needed).\nKREBS CYCLE: in the mitochondrial matrix. Breaks down pyruvate fully. Uses pyruvate. Makes CO2 + 2 ATP + NADH/FADH2. Aerobic.\nELECTRON TRANSPORT CHAIN (ETC): on the inner mitochondrial membrane. Makes the most ATP. Uses NADH/FADH2 + oxygen. Makes ~34 ATP + water. Aerobic.",
+          tip:"Location order: Cytoplasm, Matrix, Membrane. ATP order: small (2), small (2), BIG (~34)." },
+        { q:"Why is oxygen needed for cellular respiration?",
+          a:"Oxygen is the final electron acceptor at the end of the electron transport chain. Without oxygen, the chain backs up and stops, so almost no ATP can be made aerobically.",
+          why:"No oxygen means the cell falls back on fermentation (just glycolysis), which makes only 2 ATP instead of ~36." },
+        { q:"How are photosynthesis and cellular respiration interrelated?",
+          a:"They are opposite, connected processes. Photosynthesis uses CO2 + water + light to make glucose + oxygen. Respiration uses glucose + oxygen to make CO2 + water + energy. The products of one are the reactants of the other.",
+          tip:"They form a cycle. Plants do both; animals do respiration only." },
+        { q:"Compare aerobic and anaerobic conditions (cycling of matter and energy).",
+          a:"Aerobic = with oxygen: glucose is fully broken down to CO2 and water, making lots of ATP (~36). Anaerobic = without oxygen: only glycolysis/fermentation runs, making just 2 ATP, plus lactic acid (in muscles) or alcohol + CO2 (in yeast)." },
+      ]},
+      { name: "Unit 4: Cell Cycle and Mitosis", cards: [
+        { q:"Describe the cell cycle (the stages and what happens in each).",
+          a:"INTERPHASE (G1 = cell grows and does its job; S = DNA is copied/synthesized; G2 = grows more and prepares to divide), then MITOSIS (the nucleus divides), then CYTOKINESIS (the cytoplasm splits into two cells).",
+          tip:"Interphase = 'in-between' phase. Order inside it: G1, S, G2 (grow, synthesize/copy, grow again)." },
+        { q:"Relate the frequency of cell division to certain cell types.",
+          a:"Cells that wear out or get damaged divide often (skin cells, the lining of your gut, blood cells). Highly specialized cells divide rarely or never (nerve cells, muscle cells)." },
+        { q:"What is the G0 stage and why do some cells enter it?",
+          a:"G0 is a resting phase where a cell exits the cycle and stops dividing. Specialized cells (like nerve and muscle cells) enter G0 because they are doing their permanent job and do not need to divide." },
+        { q:"Why can cells only grow to a certain size? (use the lab idea)",
+          a:"As a cell grows, its volume increases faster than its surface area (membrane). Eventually the membrane is too small to move enough materials in and waste out, so the cell must divide.",
+          why:"The lab used cubes/agar to show surface-area-to-volume ratio: bigger cube = smaller ratio = harder to supply the inside." },
+        { q:"What internal and external factors regulate cell division and the cell cycle?",
+          a:"Internal: proteins like cyclins and checkpoints that make sure each step is done correctly. External: growth factors, contact with neighboring cells, available space, and nutrients." },
+        { q:"What is apoptosis?",
+          a:"Programmed cell death: a controlled, normal process where a cell self-destructs. It removes damaged, infected, or unneeded cells safely." },
+        { q:"How are cancer cells different from normal cells? / What is cancer and what causes it?",
+          a:"Cancer cells ignore the cell cycle's signals and divide uncontrollably, do not die when they should (skip apoptosis), and can pile into tumors and spread (metastasize). Cancer is uncontrolled cell division. Causes: mutations in cell-cycle genes from things like UV rays, smoking, radiation, chemicals (carcinogens), or heredity.",
+          why:"Tie to the cell cycle: in cancer the cycle is no longer regulated, the checkpoints fail, so the cell keeps dividing nonstop." },
+        { q:"Compare DNA, Chromosome, Chromatin, Chromatids, and Centromere.",
+          a:"DNA = the molecule that stores genetic information.\nChromatin = loose, uncoiled DNA (its normal form during interphase).\nChromosome = tightly coiled, condensed DNA (visible during division).\nSister chromatids = the two identical halves of a duplicated chromosome.\nCentromere = the spot where the two sister chromatids are joined.",
+          tip:"Chromatin = relaxed/loose. Chromosome = condensed/tight. Same DNA, different packaging." },
+        { q:"Explain mitosis: the stages and how DNA/chromosomes look at each.",
+          a:"PROPHASE: chromatin coils into chromosomes, the nuclear membrane breaks down, spindle fibers form.\nMETAPHASE: chromosomes line up single-file across the middle of the cell.\nANAPHASE: sister chromatids split and are pulled to opposite ends.\nTELOPHASE: nuclear membranes reform around two sets of chromosomes, which uncoil back into chromatin.",
+          tip:"Order = PMAT. Try 'People Meet And Talk' or 'Pass My Awesome Test'." },
+        { q:"Differentiate between mitosis and cytokinesis.",
+          a:"Mitosis = the division of the nucleus (the DNA is split into two identical nuclei). Cytokinesis = the division of the cytoplasm, which pinches the cell into two separate daughter cells." },
+        { q:"Identify and sequence the 4 stages of mitosis from the pictures.",
+          a:"Match by what you see: Prophase = scattered, condensing chromosomes with a forming spindle. Metaphase = chromosomes lined up in the middle. Anaphase = chromosomes pulled to opposite sides. Telophase = two new nuclei / the cell pinching into two. The normal left-to-right order is Prophase, Metaphase, Anaphase, Telophase.",
+          tip:"Find the one with chromosomes IN A LINE = Metaphase. Find the one SPLITTING into two cells = Telophase. The rest fall in order." },
+        { q:"Matching: which cell-cycle phase? (A=Interphase-S, B=Anaphase, C=Metaphase, D=Interphase-G1)",
+          a:"5. Chromosomes line up in the middle of the cell = C (Metaphase).\n6. The cell is growing and doing its job = D (Interphase-G1).\n7. Chromosomes pull apart toward opposite ends = B (Anaphase).\n8. DNA is copied to prepare for division = A (Interphase-S)." },
+        { q:"What is cell differentiation?",
+          a:"The process by which an unspecialized cell becomes a specific, specialized cell type (like a muscle or nerve cell) by turning certain genes on and others off." },
+        { q:"Differentiate adult stem cells and embryonic stem cells.",
+          a:"Embryonic stem cells can become ANY cell type in the body (most flexible) and come from an early embryo. Adult stem cells are limited: they can only become a few related cell types, and they are found in body tissues (like bone marrow)." },
+        { q:"What are genes and what role do they play in cell differentiation?",
+          a:"Genes are segments of DNA that code for proteins/traits. Every cell has the same genes, but differentiation happens because different genes are switched on or off in different cell types." },
+      ]},
+      { name: "Unit 5: DNA and Protein Synthesis", cards: [
+        { q:"State the function of DNA and describe its structure.",
+          a:"Function: DNA stores the genetic instructions for making proteins, which build the organism's traits. Structure: a double helix (twisted ladder) made of two strands; the sides are a sugar-phosphate backbone, and the rungs are paired nitrogen bases held by hydrogen bonds.",
+          tip:"DNA = the instruction manual. Double helix = twisted ladder." },
+        { q:"Name the parts that join to form DNA (label the nucleotide).",
+          a:"A nucleotide has 3 parts: (1) a phosphate group, (2) a 5-carbon sugar (deoxyribose), and (3) a nitrogenous base. On the diagram: the circled P group = phosphate, the pentagon ring = sugar, the ring with nitrogen = the base.",
+          tip:"Phosphate, Sugar, Base = the 3 pieces of every nucleotide." },
+        { q:"Explain how the nitrogen bases bond in DNA.",
+          a:"Bases pair by complementary base pairing held together by hydrogen bonds: Adenine pairs with Thymine (A-T), and Guanine pairs with Cytosine (G-C).",
+          tip:"A-T = Apple in a Tree. G-C = Gold Coin. They always pair the same way." },
+        { q:"If a DNA strand reads T A T C G A T G G C A A G C T, what is the complementary strand?",
+          a:"A T A G C T A C C G T T C G A",
+          why:"Swap each base for its partner: A-T and G-C. T becomes A, A becomes T, C becomes G, G becomes C, and so on down the line." },
+        { q:"Define gene and explain its purpose and location.",
+          a:"A gene is a segment of DNA that codes for a specific protein or trait. Its purpose is to give instructions for building proteins. Genes are located on chromosomes, inside the nucleus." },
+        { q:"DNA, RNA, or Both? (a-g)",
+          a:"a. Has the base Uracil (U) = RNA\nb. Contains genetic information = Both\nc. Has the sugar deoxyribose = DNA\nd. Has the base Thymine (T) = DNA\ne. Is single stranded = RNA\nf. Contains the bases A, C, G = Both\ng. Is double stranded with a helical shape = DNA",
+          tip:"RNA: single strand, has Uracil, sugar is ribose. DNA: double strand, has Thymine, sugar is deoxyribose." },
+        { q:"Differentiate between the terms codon and anticodon.",
+          a:"A codon is a group of 3 bases on the mRNA that codes for one amino acid. An anticodon is the matching group of 3 bases on a tRNA that pairs with the codon. Tie to gene: the gene (DNA) sets the codons, which set the amino acid order, which makes the protein." },
+        { q:"Describe protein synthesis (include transcription and translation).",
+          a:"TRANSCRIPTION (in the nucleus): DNA is used as a template to build a matching mRNA strand. The mRNA then leaves the nucleus and goes to a ribosome.\nTRANSLATION (at the ribosome, in the cytoplasm): the ribosome reads the mRNA codons; tRNA molecules bring the matching amino acids using their anticodons; the amino acids link together into a protein chain.",
+          tip:"Transcription = DNA to mRNA (rewrite). Translation = mRNA to protein (change languages)." },
+        { q:"True or False: To find the correct amino acid, you look at the mRNA codons.",
+          a:"TRUE. You read the mRNA codons (3 bases at a time) and use the genetic code chart to find each amino acid." },
+        { q:"True or False: The codon for Methionine (Met) is UGA.",
+          a:"FALSE. The codon for Methionine is AUG (which is also the START codon). UGA is a STOP codon.",
+          tip:"AUG = Always Use to Get started (start codon = Met)." },
+        { q:"True or False: The anticodon of the mRNA codon GAC is CTG.",
+          a:"FALSE. The anticodon would be CUG, not CTG. RNA never uses Thymine (T); it uses Uracil (U) instead.",
+          why:"Pair GAC: G-C, A-U, C-G = CUG. Because it is tRNA (RNA), the A pairs with U, not T." },
+        { q:"True or False: A STOP codon codes for an amino acid.",
+          a:"FALSE. Stop codons (UAA, UAG, UGA) do not code for any amino acid. They signal the end of the protein." },
+        { q:"DNA reads TAC GCG GTA CGA TTT ACC AGT CTA ATT. Give the mRNA, the amino acids, and the tRNA anticodons.",
+          a:"mRNA: AUG CGC CAU GCU AAA UGG UCA GAU UAA\nAmino acids: Met - Arg - His - Ala - Lys - Trp - Ser - Asp - STOP\ntRNA anticodons: UAC GCG GUA CGA UUU ACC AGU CUA AUU",
+          why:"Step 1: transcribe DNA to mRNA (A-U, T-A, C-G, G-C). Step 2: read each mRNA codon on the code chart for the amino acid (AUG = start/Met; UAA = stop). Step 3: the tRNA anticodon is complementary to each mRNA codon (using U, not T)." },
+        { q:"Label the translation diagram (#1-5: mRNA, Amino Acids, tRNA, Anticodon, Protein chain).",
+          a:"Match by location: the long strand the ribosome moves along = mRNA. The clover-shaped molecules that drop off amino acids = tRNA. The 3 bases on the bottom of a tRNA that read the codon = Anticodon. The single balls being delivered = Amino Acids. The growing string of linked balls = Protein chain.",
+          tip:"tRNA is the delivery truck, the anticodon is its license plate, amino acids are the cargo, the protein chain is the finished stack." },
+        { q:"Identify points 1, 2, 3, 4, X, and Y on the DNA strand diagram.",
+          a:"Use base pairing (A-T, G-C). If 1 pairs with A, then 1 = Thymine. If 2 pairs with G, then 2 = Cytosine. If 3 pairs with G, then 3 = Cytosine. If 4 pairs with A, then 4 = Thymine. X (the pentagon) = the sugar (deoxyribose). Y (the circle) = the phosphate group.",
+          tip:"On a DNA ladder: circles = phosphate, pentagons = sugar, the paired letters in the middle = bases." },
+        { q:"Construct an explanation: how does DNA determine the structure of proteins and an organism's traits?",
+          a:"The order of bases in DNA sets the order of codons in mRNA, which sets the order of amino acids in a protein. The amino acid order determines the protein's shape and job. Proteins build body structures and run cell functions, and those add up to the organism's traits.",
+          tip:"DNA to RNA to protein to trait. Change the DNA letters and you can change the protein, and the trait." },
+      ]},
+      { name: "Unit 6: Genetics", cards: [
+        { q:"What are homologous chromosomes? (and diploid vs haploid)",
+          a:"Homologous chromosomes are a matching pair, one from your mom and one from your dad, that carry the same genes in the same order (but possibly different versions/alleles). Diploid (2n) = a full set of pairs (body cells, humans = 46). Haploid (n) = half, one of each (sex cells, humans = 23).",
+          tip:"Diploid = Double. Haploid = Half." },
+        { q:"Explain the events and purpose of meiosis.",
+          a:"Meiosis is cell division that makes sex cells (sperm and eggs). One diploid cell divides twice (Meiosis I and Meiosis II) to make 4 haploid cells, each with half the chromosomes. Purpose: produce gametes for sexual reproduction and create genetic variation.",
+          tip:"Meiosis makes 4 cells, each Half. Mitosis makes 2 cells, each the saMe (identical)." },
+        { q:"Differentiate Meiosis I and Meiosis II.",
+          a:"Meiosis I separates the homologous PAIRS (this is where the chromosome number is cut in half, and where crossing over happens). Meiosis II separates the SISTER CHROMATIDS (like mitosis), making 4 haploid cells total." },
+        { q:"Label and sequence the stages of Meiosis I.",
+          a:"Stages in order: Prophase I (chromatin coils, homologous chromosomes pair up, crossing over, nucleus disappears), Metaphase I (the pairs line up at the center), Anaphase I (the pairs separate to opposite sides), Telophase I (two cells begin to form). Sequence first to last = Prophase I, Metaphase I, Anaphase I, Telophase I.",
+          tip:"In Meiosis I the PAIRS line up and separate. Look for two chromosomes traveling together." },
+        { q:"Label and sequence the stages of Meiosis II.",
+          a:"Prophase II (chromosomes recoil in each cell), Metaphase II (chromosomes line up single-file, like mitosis), Anaphase II (sister chromatids split), Telophase II (four haploid cells form). Sequence = Prophase II, Metaphase II, Anaphase II, Telophase II." },
+        { q:"Match each description to its phase of meiosis (each used once).",
+          a:"Chromosomes uncoil, nucleus reforms, FOUR haploid cells form = Telophase II.\nHomologous PAIRS line up in the center = Metaphase I.\nChromatin coils, nucleus disappears (no crossing over) = Prophase II.\nChromosomes uncoil, nucleus reforms, TWO haploid cells form = Telophase I.\nSister chromatids split and move apart = Anaphase II.\nChromatin coils, homologs CROSS OVER, nucleus disappears = Prophase I.\nChromosomes line up SINGLE FILE in the middle = Metaphase II.\nHomologous PAIRS separate and move apart = Anaphase I.",
+          tip:"Crossing over = Prophase I. 'Four cells' = Telophase II. 'Two cells' = Telophase I." },
+        { q:"What is the purpose of meiosis, and are the daughter cells haploid or diploid?",
+          a:"Purpose: to make gametes (sex cells) for sexual reproduction and to add genetic variation. The 4 daughter cells are HAPLOID (n): they have half the chromosome number of the parent, because the pairs were separated. This way, when sperm and egg join, the normal diploid number is restored." },
+        { q:"What is crossing over, when does it occur, and why is it important?",
+          a:"Crossing over is when homologous chromosomes swap matching segments of DNA. It occurs during Prophase I of meiosis. It is important because it shuffles alleles into new combinations, creating genetic variation.",
+          tip:"Crossing over happens in PROPHASE I. More variation = stronger chance a species can adapt." },
+        { q:"Vocabulary: choose the best term.",
+          a:"a. Different forms of the same trait = ALLELES\nb. An inherited trait/characteristic = GENE\nc. The genetic make-up of an organism = GENOTYPE\nd. The physical appearance of an organism = PHENOTYPE\ne. Expressed if even one allele is present = DOMINANT\nf. Expressed only if two alleles present (aa) = RECESSIVE\ng. Two of the same alleles (AA or aa) = HOMOZYGOUS\nh. Two different alleles (Aa) = HETEROZYGOUS",
+          tip:"GenoType = your code (letters). PhenoType = what you see (physical). Homo = same, Hetero = different." },
+        { q:"Explain Mendel's Law of Segregation.",
+          a:"The two alleles for each trait separate during meiosis, so each gamete (sperm or egg) carries only ONE allele for that trait. The pair is reunited at fertilization." },
+        { q:"Monohybrid cross: tt (homozygous recessive) x Tt (heterozygous). Genotypes and phenotypes?",
+          a:"Offspring genotypes: 2 Tt and 2 tt, which is 50% Tt and 50% tt (a 1:1 ratio).\nPhenotypes: 50% tall (Tt) and 50% short (tt), a 1:1 ratio.",
+          why:"Punnett square: tt gives gametes t and t; Tt gives T and t. Combinations = Tt, tt, Tt, tt." },
+        { q:"Cross two heterozygous green corn plants: Gg x Gg (green G dominant, white g). Genotypes and phenotypes?",
+          a:"Genotypes: 1 GG : 2 Gg : 1 gg.\nPhenotypes: 3 green : 1 white (75% green, 25% white).",
+          tip:"A heterozygous x heterozygous cross (Gg x Gg) always gives the classic 3:1 phenotype ratio." },
+        { q:"Explain Mendel's Law of Independent Assortment. Model BbEe x bbee.",
+          a:"Law of Independent Assortment: alleles for different genes separate independently of each other during meiosis (one trait does not affect another). Cross BbEe x bbee: the BbEe parent makes 4 gamete types (BE, Be, bE, be); the bbee parent makes only be. Offspring: BbEe, Bbee, bbEe, bbee, a 1:1:1:1 ratio.",
+          why:"Because B/b sorts separately from E/e, all four combinations are equally likely." },
+        { q:"Dihybrid cross RrYy x RrYy (round R dom, wrinkled r; yellow Y dom, green y). Phenotype ratio?",
+          a:"9:3:3:1, which is 9 Round Yellow : 3 Round green : 3 wrinkled Yellow : 1 wrinkled green.",
+          why:"Each parent makes 4 gametes (RY, Ry, rY, ry). Filling the 16-box Punnett square gives the famous 9:3:3:1 dihybrid ratio.",
+          tip:"Any heterozygous dihybrid x dihybrid cross = 9:3:3:1." },
+        { q:"Non-Mendelian inheritance: name the pattern (a-e).",
+          a:"a. Genes linked on the X chromosome = SEX-LINKED\nb. Heterozygote is a blend, red + white = pink = INCOMPLETE DOMINANCE\nc. Blood typing A, B, AB, O = MULTIPLE ALLELES\nd. Controls eye color, skin color, height = POLYGENIC TRAITS\ne. Both dominant alleles fully show, like AB blood = CODOMINANCE",
+          tip:"Incomplete = blend (pink). Codominance = both show fully (AB, or roan/spotted). Polygenic = many genes. Multiple alleles = more than 2 options for one gene." },
+      ]},
+      { name: "Unit 7: Evolution", cards: [
+        { q:"Sequence the major events of Earth's history (timeline matching).",
+          a:"1. 4.6 BYA = Earth forms (B)\n2. 3.5 BYA = First evidence of life, prokaryotic cells (F)\n3. 2.0 BYA = Complex eukaryotic cell evolved (D)\n4. 65 MYA = Dinosaurs go extinct (A)\n5. 200,000 years ago = Modern humans appeared (C)\n6. Today = 6th mass extinction (E)",
+          tip:"BYA = Billion Years Ago, MYA = Million Years Ago. Life started simple (prokaryotes) and got complex over time." },
+        { q:"What is evolution and who first described it?",
+          a:"Evolution is the change in the inherited traits of a population over many generations. Charles Darwin is credited with first describing it, through natural selection." },
+        { q:"Describe the scientific evidence for evolution.",
+          a:"Fossils (show change over time), comparative anatomy (similar body structures, like the bones in arms/wings/flippers), embryology (similar early development), and DNA/molecular evidence (related species share more DNA)." },
+        { q:"Describe natural selection as a mechanism of evolution.",
+          a:"Organisms vary; some traits help survival in a given environment. Those individuals survive and reproduce more, passing on the helpful traits. Over generations, the population shifts toward those traits. ('Survival of the fittest.')",
+          tip:"Variation, then selection by the environment, then more offspring with the winning trait." },
+        { q:"True/False (7-12).",
+          a:"7. An individual will evolve when the environment changes = FALSE (populations evolve over generations, not single individuals).\n8. Evolution is NOT well supported by evidence/scientists = FALSE (it is strongly supported).\n9. Mutations always make organisms unable to adapt = FALSE (mutations can be helpful, harmful, or neutral).\n10. Evolution is always very slow, taking thousands of years = FALSE (it can happen fast, like bacteria resisting antibiotics).\n11. Fossils and comparative anatomy are evidence for evolution = TRUE.\n12. Comparing DNA between species is evidence for evolution = TRUE." },
+      ]},
+    ]
+  },
+
+  english: {
+    name: "English 9", label: "English 9 Final Exam", color: "#7a4fc0",
+    units: [
+      { name: "R&J: Sonnet / Prologue Structure", cards: [
+        { q:"Definition and structure of a Quatrain.",
+          a:"A quatrain is a stanza (group) of 4 lines. A Shakespearean sonnet has 3 quatrains followed by a couplet." },
+        { q:"Definition and structure of a Couplet.",
+          a:"A couplet is 2 lines that rhyme and are next to each other. A Shakespearean sonnet ends with a rhyming couplet (the final 2 lines)." },
+        { q:"Rhyme scheme of a Shakespearean sonnet.",
+          a:"ABAB CDCD EFEF GG (three quatrains, each with alternating rhyme, then a final rhyming couplet).",
+          tip:"14 lines total: 3 quatrains (12 lines) + 1 couplet (2 lines) = 14." },
+        { q:"Number of syllables per line in a sonnet.",
+          a:"10 syllables per line, written in iambic pentameter (5 pairs of unstressed-stressed beats).",
+          tip:"Penta = 5 feet, each foot = 2 syllables, so 5 x 2 = 10 syllables (da-DUM x5)." },
+      ]},
+      { name: "R&J: Literary Devices (definition + example from the play)", cards: [
+        { q:"Metaphor",
+          a:"A direct comparison saying one thing IS another (no 'like' or 'as'). Example: Romeo says 'It is the East, and Juliet is the sun.'" },
+        { q:"Simile",
+          a:"A comparison using 'like' or 'as'. Example: Romeo compares Juliet's beauty to 'a rich jewel in an Ethiop's ear.'" },
+        { q:"Personification",
+          a:"Giving human qualities to something non-human. Example: 'the gray-eyed morn smiles on the frowning night.'" },
+        { q:"Alliteration",
+          a:"Repeating the same beginning consonant sound in nearby words. Example: 'From forth the fatal loins of these two foes.'",
+          tip:"Listen for the repeated first letter sound: 'fatal... foes', 'from forth'." },
+        { q:"Oxymoron",
+          a:"Two opposite words put together. Example: Romeo's 'O brawling love, O loving hate'; also 'beautiful tyrant' and 'fiend angelical.'",
+          tip:"Oxymoron = opposites side by side (jumbo shrimp). R&J is full of them because love and hate mix." },
+        { q:"Allusion",
+          a:"A reference to a famous person, place, myth, or event. Example: references to Cupid, Diana (Dian), and Echo from mythology." },
+        { q:"Pun",
+          a:"A joke that plays on words with more than one meaning. Example: the dying Mercutio says 'ask for me tomorrow, and you shall find me a grave man' (grave = serious AND a burial site)." },
+        { q:"Foreshadowing",
+          a:"A hint about what will happen later. Example: the Prologue calls them 'star-crossed lovers,' and Romeo fears 'some consequence yet hanging in the stars' before the party." },
+        { q:"Dramatic Irony",
+          a:"When the audience knows something a character does not. Example: the audience knows Juliet is only asleep from the potion, but Romeo believes she is dead and kills himself." },
+        { q:"Symbolism",
+          a:"When an object stands for a bigger idea. Examples: poison (the destructive side of haste and hate), and light vs. dark (their love shines against a dark, feuding world)." },
+      ]},
+      { name: "R&J: Types of Speech / Monologue", cards: [
+        { q:"Soliloquy (definition + example).",
+          a:"A speech a character gives ALONE on stage, revealing their private thoughts to the audience. Example: Juliet's 'O Romeo, Romeo, wherefore art thou Romeo?' on the balcony.",
+          tip:"Solo = alone. A soliloquy is spoken when no one else is listening." },
+        { q:"Monologue (definition + how it differs from a soliloquy).",
+          a:"A long speech given to OTHER characters who are present. It differs from a soliloquy because the speaker is NOT alone, others can hear it. Example: Mercutio's Queen Mab speech." },
+        { q:"Aside (definition + example).",
+          a:"A short remark a character says to the audience (or one other character) that the others on stage are not supposed to hear. Example: Juliet's quiet comments during the party as she realizes who Romeo is." },
+        { q:"Dialogue (definition).",
+          a:"A conversation between two or more characters." },
+      ]},
+      { name: "R&J: Story Elements & Dramatic Structure", cards: [
+        { q:"Protagonist vs. Antagonist (definitions + examples).",
+          a:"Protagonist = the main character the story follows: Romeo (and Juliet). Antagonist = what works against them: the Montague-Capulet feud and hot-headed Tybalt (and you can argue fate itself)." },
+        { q:"Tragic Hero (definition + what makes Romeo one).",
+          a:"A tragic hero is a basically good, noble character whose downfall comes from a personal flaw plus bad luck. Romeo is one: he is loving and brave, but his impulsiveness leads to his death." },
+        { q:"Tragic Flaw (definition + Romeo's flaw).",
+          a:"A tragic flaw is the personal weakness that causes the hero's downfall. Romeo's flaw is impulsiveness/haste: he falls in love instantly, kills Tybalt in a rage, and rushes to suicide without waiting for the truth." },
+        { q:"Comic Relief (definition + who provides it).",
+          a:"Comic relief is humor that breaks the tension in a serious story. In R&J, the Nurse and Mercutio (and the servants) provide it with jokes and wordplay." },
+      ]},
+      { name: "R&J: Major Themes", cards: [
+        { q:"Overall theme of Romeo and Juliet (love, fate, consequences).",
+          a:"The play explores how intense young love collides with hate (the family feud) and fate, and how impulsive choices lead to tragic consequences. It also shows how hate hurts everyone, not just the fighters." },
+        { q:"How do love and fate interact throughout the play?",
+          a:"Their love is powerful but doomed from the start, they are 'star-crossed' (fated). Again and again, fate (the feud, a delayed message, bad timing) blocks their love, so love and fate pull against each other until the tragic end." },
+      ]},
+      { name: "R&J: Key Plot Events (Act by Act)", cards: [
+        { q:"Act I",
+          a:"A street brawl erupts; the Prince threatens death for more fighting. Romeo mopes over Rosaline. The Capulets host a party; Romeo and Juliet meet, instantly fall in love, then learn they are from enemy families." },
+        { q:"Act II",
+          a:"The balcony scene: Romeo and Juliet declare their love and decide to marry. Friar Laurence agrees to marry them secretly, hoping it will end the family feud." },
+        { q:"Act III",
+          a:"Tybalt kills Mercutio; enraged, Romeo kills Tybalt. The Prince banishes Romeo to Mantua. Juliet's parents arrange for her to marry Paris.",
+          tip:"Act III is the turning point: the deaths of Mercutio and Tybalt change everything." },
+        { q:"Act IV",
+          a:"To avoid marrying Paris, Juliet takes Friar Laurence's potion to fake her death. Her family finds her 'dead' and places her in the tomb." },
+        { q:"Act V",
+          a:"Romeo never gets the message explaining the plan. Believing Juliet is truly dead, he buys poison, goes to the tomb, kills Paris, and drinks the poison. Juliet wakes, finds Romeo dead, and stabs herself. The grieving families finally make peace." },
+      ]},
+      { name: "R&J: Key Characters", cards: [
+        { q:"Romeo",
+          a:"A young Montague, the romantic, impulsive protagonist. His passion and haste drive the love story and the tragedy." },
+        { q:"Juliet",
+          a:"A young Capulet, intelligent and increasingly brave and determined. She matures fast, defying her family for love." },
+        { q:"Mercutio",
+          a:"Romeo's witty, hot-blooded friend (related to the Prince). Provides comic relief; his death pushes Romeo to kill Tybalt." },
+        { q:"Tybalt",
+          a:"Juliet's aggressive Capulet cousin. He loves to fight and his hatred of Montagues triggers the key deaths (an antagonist)." },
+        { q:"Friar Laurence",
+          a:"A priest who marries Romeo and Juliet secretly and devises the potion plan to reunite them. His good intentions backfire." },
+        { q:"The Nurse",
+          a:"Juliet's caregiver and confidante. She is earthy, talkative, and provides comic relief, but later loses Juliet's trust." },
+        { q:"Benvolio",
+          a:"Romeo's calm, peacemaking cousin. He is a foil to Tybalt (peace vs. aggression) and tries to keep order." },
+        { q:"The Prince",
+          a:"The ruler of Verona (Prince Escalus). He represents law and order, warning and then punishing the feuding families." },
+        { q:"Paris",
+          a:"A nobleman who wants to marry Juliet, with her parents' approval. Romeo kills him at the tomb." },
+        { q:"Lord and Lady Capulet",
+          a:"Juliet's parents. They pressure her to marry Paris and do not understand her, which deepens the tragedy." },
+        { q:"William Shakespeare (background).",
+          a:"An English playwright and poet, born 1564 in Stratford-upon-Avon. Often called 'the Bard.' He wrote around 37 plays and 154 sonnets during the Elizabethan era and was tied to the Globe Theatre in London." },
+      ]},
+      { name: "Grammar: Punctuation & Sentence Structure", cards: [
+        { q:"Capitalization Rules.",
+          a:"Capitalize: the first word of a sentence, the pronoun 'I,' proper nouns (specific names of people, places, brands), days, months, holidays, and the important words in titles." },
+        { q:"Non-essential clauses (punctuation).",
+          a:"A non-essential clause adds extra info that can be removed without changing the main meaning. Set it off with commas. Example: 'My dog, who loves naps, is asleep.'" },
+        { q:"Appositives (punctuation).",
+          a:"An appositive is a noun phrase that renames the noun right before it. If it is non-essential, surround it with commas. Example: 'My teacher, Mr. Lee, is funny.'" },
+        { q:"Semicolon rules.",
+          a:"Use a semicolon to join two complete, related sentences without a conjunction. Example: 'It was late; we went home.' Also use semicolons to separate list items that already contain commas." },
+        { q:"Dashes.",
+          a:"A dash sets off information for emphasis or marks a sudden break or extra thought. Example: 'She had one goal, to win, and nothing would stop her.'" },
+        { q:"Colons.",
+          a:"Use a colon after a complete sentence to introduce a list, an explanation, or a quote. Example: 'Bring three things: a pen, paper, and an ID.'",
+          tip:"What comes BEFORE a colon must be a complete sentence on its own." },
+        { q:"Independent clause (definition + example).",
+          a:"An independent clause has a subject and verb and expresses a complete thought, so it can stand alone as a sentence. Example: 'The bell rang.'" },
+        { q:"Dependent (subordinate) clause (definition + example).",
+          a:"A dependent clause has a subject and verb but does NOT express a complete thought, so it cannot stand alone. It usually starts with a word like because, although, when, if, since. Example: 'Because the bell rang.'" },
+        { q:"How to identify which clause is which in a complex sentence.",
+          a:"Find the part that could be its own sentence, that is the independent clause. The part that starts with a subordinating word (because, although, when, since, if) and leaves you hanging is the dependent clause.",
+          tip:"If it starts with 'because/although/when/if' and feels unfinished, it is dependent." },
+      ]},
+      { name: "Author's Purpose & Text Features", cards: [
+        { q:"Purpose of a lead sentence in a feature article.",
+          a:"To grab the reader's attention and pull them into the story so they keep reading." },
+        { q:"Purpose of text features in non-fiction.",
+          a:"To help the reader find, organize, and understand information more easily." },
+        { q:"Text features found in non-fiction (glossary, index, table of contents).",
+          a:"Table of contents: lists sections/chapters and their page numbers at the front. Glossary: defines key terms (like a mini dictionary) at the back. Index: an alphabetical list of topics with the page numbers where they appear, at the back." },
+        { q:"Purpose of a headline in a newspaper or magazine.",
+          a:"To grab attention and quickly tell the reader the main idea or topic of the article." },
+        { q:"Definition of 'unbiased' writing.",
+          a:"Writing that is fair and balanced, sticking to facts and presenting more than one side without pushing the author's personal opinion." },
+        { q:"How to recognize bias in non-fiction texts.",
+          a:"Look for emotional or loaded words, opinions stated as if they are facts, only one side of the story, and missing or ignored viewpoints." },
+      ]},
+      { name: "The Bronx Masquerade (Nikki Grimes)", cards: [
+        { q:"Tyrone: his role and how his perspective ties the novel together.",
+          a:"Tyrone is a student who speaks between the other characters' chapters, reacting to each poem. His running commentary connects all the separate voices into one story. He starts cynical about his future but grows more hopeful as the class bonds." },
+        { q:"Diondra: what she hides and why.",
+          a:"Diondra hides her love of art/painting (and feels insecure about being tall) because she fears she will not be accepted or approved of for it." },
+        { q:"Devon: his passion and the pressure from Mike.",
+          a:"Devon is a basketball star who secretly loves reading and poetry. He feels pressure (from people like Mike) to act only like a jock and hide his bookish side." },
+        { q:"Lupe: her desire and what it represents.",
+          a:"Lupe wants a baby. Her desire really represents a deeper need to be loved and to feel like she belongs to someone." },
+        { q:"Janelle: what she struggles with.",
+          a:"Janelle struggles with body image and self-acceptance, learning to value herself for who she is, not her looks." },
+        { q:"Sheila: what Wesley encourages her to do.",
+          a:"Wesley encourages Sheila to open up and keep sharing her writing/feelings instead of holding back." },
+        { q:"Gloria: her views on motherhood.",
+          a:"Gloria is a teen mom who loves her baby and takes motherhood seriously, while also trying to hold on to her own dreams and future." },
+        { q:"Wesley: his role as an encourager.",
+          a:"Wesley ('Bad Boy') supports and lifts up his classmates, helping create a safe space where people feel okay sharing." },
+        { q:"Mike: his prejudice and how it affects Devon.",
+          a:"Mike judges Devon by a stereotype, assuming a tall, athletic Black student is only good for basketball, which pressures Devon to hide his love of poetry." },
+        { q:"Mr. Ward: his role and how he creates the Open Mike sessions.",
+          a:"Mr. Ward is the English teacher who starts the Open Mike Friday poetry sessions, giving students a regular, safe stage to share their writing and true selves." },
+        { q:"Theme: Self-expression and authenticity.",
+          a:"Writing and sharing poetry helps the characters reveal their true selves and be honest about who they really are." },
+        { q:"Theme: Prejudice and stereotypes.",
+          a:"Characters face and slowly overcome the stereotypes others put on them (and that they put on each other), learning to see past first impressions." },
+        { q:"Theme: Identity and belonging.",
+          a:"As the students share, their self-perceptions evolve, they figure out who they are and start to feel they belong in the group." },
+        { q:"Theme: Community.",
+          a:"Over the novel, a room full of strangers becomes a supportive community that listens to and respects one another." },
+        { q:"Theme: Vulnerability and connection (Grimes's message).",
+          a:"Grimes's overall message: when people are brave enough to be vulnerable and share their real selves, they connect with others." },
+        { q:"Symbol: the headline 'Student Poets Bloom in the Bronx.'",
+          a:"It symbolizes growth: the students 'blooming' like flowers, being recognized and coming into their own through poetry." },
+        { q:"Symbol: the Open Mike sessions.",
+          a:"They represent a safe space for honest self-expression, where students drop their masks and are truly heard." },
+        { q:"Symbol: the 'masquerade' (the masks).",
+          a:"The masks are the false fronts the characters wear to hide their true selves (their fears, dreams, and struggles). They remove the masks by sharing real poetry, which is the point of the title." },
+      ]},
+    ]
+  },
+
+  health: {
+    name: "Health", label: "Health Final Exam", color: "#b54b35",
+    units: [
+      { name: "Social and Emotional Health", cards: [
+        { q:"What are the 3 categories of risk factors?",
+          a:"Heredity (the genes/biology you are born with), Environment (your surroundings), and Behavior (the choices and habits you control)." },
+        { q:"Label each risk factor as Uncontrollable (U) or Controllable (C).",
+          a:"a. Smoking = C\nb. Pollution = U (environmental)\nc. Eating a high-fat diet = C\nd. Drinking = C\ne. Being around second-hand smoke = U (it is often in your environment; you can try to avoid it, but you do not fully control it)\nf. Breast cancer = U (heredity)\ng. Lack of physical activity = C",
+          tip:"If it is YOUR choice/habit, it is Controllable. If it is genes or surroundings, it is Uncontrollable." },
+        { q:"What is eustress? (not just 'good')",
+          a:"Eustress is positive, helpful stress that motivates and energizes you, like the excitement before a game, a performance, or a fun challenge. It can push you to perform better." },
+        { q:"What is distress? (not just 'bad')",
+          a:"Distress is negative, harmful stress that feels overwhelming and can hurt your health and performance, like the anxiety from too much pressure or a scary event." },
+        { q:"List 2 positive ways to cope with stress and why they help.",
+          a:"YOUR ANSWER (examples like 'Play-Doh' and 'birdwatching' work great). Why they help: relaxing, hands-on or calming activities lower tension, distract you from the stressor, and reset your mood. Other good options: exercise, deep breathing, talking to someone, journaling, getting enough sleep." },
+        { q:"List 2 negative (non-helpful) ways people deal with stress and why they are not helpful.",
+          a:"YOUR ANSWER (examples: drinking, using drugs, avoiding the problem, lashing out, overeating, isolating). Why they are not helpful: they do not solve the real problem, they can create NEW problems (health, addiction, hurt relationships), and the stress comes back worse." },
+        { q:"What is depression?",
+          a:"A mental health condition involving persistent sadness and loss of interest in things you used to enjoy, lasting weeks or longer, and interfering with daily life. It is medical, not just 'being sad,' and it is treatable." },
+        { q:"Name 2 potential symptoms of someone battling depression.",
+          a:"Any two of: lasting sadness or emptiness, loss of interest in activities, fatigue/low energy, changes in sleep or appetite, trouble concentrating, withdrawing from people, feelings of hopelessness or worthlessness." },
+        { q:"Why is it important to be able to show empathy to someone?",
+          a:"Empathy (understanding and sharing how someone else feels) helps them feel heard and supported, builds trust, and lets you respond with kindness instead of judgment." },
+        { q:"List 3 things you could do to help a friend who may be struggling with depression.",
+          a:"1. Listen without judging and take them seriously. 2. Encourage them to talk to a trusted adult or counselor. 3. Stay connected, check on them, and include them. (If they mention hurting themselves, tell a trusted adult right away, do not keep it secret.)" },
+      ]},
+      { name: "Personal Health: Sleep", cards: [
+        { q:"Name 3 consequences of not getting enough sleep.",
+          a:"Any three of: poor focus and memory, a weaker immune system (get sick more), moodiness/irritability, slower reaction time, poor decision-making, weight gain." },
+        { q:"Why is sleep needed for the body to function at an optimal level?",
+          a:"During sleep the body repairs cells and tissues, the brain stores memories and clears waste, growth hormones are released, and energy is restored, so you can think, move, and stay healthy the next day." },
+      ]},
+      { name: "Personal Health: CPR / AED & First Aid", cards: [
+        { q:"What is the rate at which compressions are given?",
+          a:"100 to 120 compressions per minute.",
+          tip:"That is the beat of the song 'Stayin' Alive.'" },
+        { q:"How far should you compress on adults, children, and infants?",
+          a:"Adults: at least 2 inches. Children: about 2 inches (about one-third the chest depth). Infants: about 1.5 inches." },
+        { q:"How many compressions to breaths are given?",
+          a:"30 compressions to 2 breaths (30:2)." },
+        { q:"What steps should you take when you find an unresponsive adult?",
+          a:"1. Check that the scene is safe. 2. Check responsiveness (tap and shout). 3. Call 911 and get an AED. 4. Check for breathing. 5. If not breathing normally, start CPR (30 compressions, 2 breaths). 6. Use an AED as soon as it arrives." },
+        { q:"What steps should you take to help an adult/child or infant who is choking?",
+          a:"Adult/child: ask 'Are you choking?', then give abdominal thrusts (the Heimlich maneuver) until the object comes out or they become unresponsive. Infant: give 5 back blows followed by 5 chest thrusts, repeat. If anyone becomes unresponsive, start CPR and call 911." },
+        { q:"What is the function of an AED machine?",
+          a:"An AED (Automated External Defibrillator) reads the heart's rhythm and, if needed, delivers an electric shock to reset a dangerous rhythm back to normal during cardiac arrest." },
+        { q:"How do you use an AED?",
+          a:"Turn it on, attach the pads to the person's bare chest as shown, make sure no one is touching the person while it analyzes, deliver a shock if the machine advises one, then continue CPR." },
+        { q:"You cut yourself chopping vegetables. List 3 things to do for the bleeding wound.",
+          a:"1. Apply direct pressure with a clean cloth or bandage. 2. Raise (elevate) the wound above the heart if you can. 3. Once bleeding slows, clean it and cover it with a clean bandage. (Get medical help if it is deep or will not stop bleeding.)" },
+      ]},
+      { name: "Personal Health: Sun Safety", cards: [
+        { q:"What are the 3 types of skin cancer (where on the body, what they look like)?",
+          a:"Basal cell carcinoma: most common, on sun-exposed areas (face, neck); looks like a pearly or waxy bump. Squamous cell carcinoma: on sun-exposed areas (face, ears, hands); looks like a firm red bump or a scaly patch. Melanoma: the most dangerous; can appear anywhere; often looks like a new or changing mole with irregular edges." },
+        { q:"What are the harmful effects of UVA rays?",
+          a:"UVA rays penetrate deep into the skin and cause aging: wrinkles, leathery skin, and long-term damage that adds to skin cancer risk.",
+          tip:"UVA = Aging." },
+        { q:"What are the harmful effects of UVB rays?",
+          a:"UVB rays affect the surface and cause sunburn. They are the main cause of skin cancer.",
+          tip:"UVB = Burning." },
+        { q:"Name 3 ways to keep your skin safe from the sun.",
+          a:"Any three of: wear sunscreen (SPF 30+ and reapply), wear protective clothing/hats/sunglasses, seek shade and avoid peak sun (about 10am to 4pm), and avoid tanning beds." },
+        { q:"What do A, B, C, and D stand for when checking moles?",
+          a:"A = Asymmetry (one half does not match the other). B = Border (edges are irregular or blurry). C = Color (uneven or multiple colors). D = Diameter (bigger than a pencil eraser, about 6mm). (Many add E = Evolving/changing.)",
+          tip:"ABCDE = Asymmetry, Border, Color, Diameter, Evolving." },
+      ]},
+      { name: "Reproductive Health: Abstinence, Consent, Boundaries", cards: [
+        { q:"What is abstinence?",
+          a:"Choosing not to take part in sexual activity." },
+        { q:"Why is abstinence the safest decision regarding your health?",
+          a:"It is the only method that is 100% effective at preventing both pregnancy and sexually transmitted infections (STIs)." },
+        { q:"Why is it important to set boundaries in relationships?",
+          a:"Boundaries protect your values, health, and safety, and they make sure a relationship is built on mutual respect and comfort, not pressure." },
+        { q:"What are some ways to resist peer pressure in relationships?",
+          a:"Say 'no' clearly and confidently, give a reason or an alternative, avoid risky situations, have an exit plan, and surround yourself with friends who respect your choices." },
+        { q:"What is the age of consent in MI (Michigan)?",
+          a:"16 years old." },
+        { q:"What other parameters must be met for a person to give consent?",
+          a:"Consent must be freely given (no pressure or force), informed, and given by someone who is sober and mentally able to understand. It must be mutual, and it can be taken back (withdrawn) at any time." },
+      ]},
+      { name: "Reproductive Health: Contraceptives", cards: [
+        { q:"How do hormonal contraceptives work? What types, and how often?",
+          a:"They use hormones (estrogen and/or progestin) to stop ovulation (the release of an egg). Types and timing: the pill (daily), the patch (changed weekly), the ring (monthly), the shot/Depo (every 3 months), the implant (lasts years), and the hormonal IUD (lasts years)." },
+        { q:"How do barrier contraceptives work? What types?",
+          a:"They physically block sperm from reaching the egg. Types: male (external) condoms, female (internal) condoms, the diaphragm, and the cervical cap. They are used each time." },
+        { q:"How does an IUD work?",
+          a:"An IUD is a small device placed inside the uterus. It prevents pregnancy for years, either by releasing hormones (hormonal IUD) or using copper to stop sperm (copper IUD)." },
+        { q:"What is permanent sterilization for females called and how does it work?",
+          a:"Tubal ligation (getting your 'tubes tied'). The fallopian tubes are cut or blocked so the egg and sperm cannot meet." },
+        { q:"What is permanent sterilization for males called and how does it work?",
+          a:"A vasectomy. The vas deferens (the tubes that carry sperm) are cut or blocked, so sperm no longer leave the body in semen." },
+        { q:"How do emergency contraceptives work, and what is the timeframe?",
+          a:"The emergency contraceptive (the 'morning-after pill') mainly works by delaying or preventing ovulation after unprotected sex. It should be taken as soon as possible, generally within 72 hours (3 days); some types work up to 5 days. The sooner, the more effective." },
+      ]},
+      { name: "Reproductive Health: Anatomy (function + F/M)", cards: [
+        { q:"Vas Deferens",
+          a:"(M) A tube that carries sperm from the epididymis toward the urethra." },
+        { q:"Cervix",
+          a:"(F) The lower, narrow opening of the uterus that connects to the vagina." },
+        { q:"Ejaculatory duct",
+          a:"(M) Carries sperm and fluid into the urethra." },
+        { q:"Fallopian Tube",
+          a:"(F) Carries the egg from the ovary to the uterus; this is usually where fertilization happens." },
+        { q:"Vagina",
+          a:"(F) The muscular canal from the cervix to the outside of the body; the birth canal." },
+        { q:"Cowper's gland",
+          a:"(M) Produces a fluid (pre-ejaculate) that lubricates and neutralizes the urethra." },
+        { q:"Fimbria",
+          a:"(F) The finger-like fringes at the end of the fallopian tube that sweep the released egg inside." },
+        { q:"Uterus",
+          a:"(F) The muscular organ where a fertilized egg implants and a baby develops." },
+        { q:"Cilia",
+          a:"(F) Tiny hair-like structures in the fallopian tube that move the egg toward the uterus." },
+        { q:"Seminal Vesicle",
+          a:"(M) Produces fluid (rich in sugar/fructose) that nourishes sperm and forms part of semen." },
+        { q:"Scrotum",
+          a:"(M) The sac that holds the testicles and regulates their temperature." },
+        { q:"Epididymis",
+          a:"(M) Stores sperm and allows them to mature." },
+        { q:"Labia Majora",
+          a:"(F) The outer folds of skin that protect the external female genitals." },
+        { q:"Ovary",
+          a:"(F) Produces eggs and the hormones estrogen and progesterone." },
+        { q:"Testicle",
+          a:"(M) Produces sperm and the hormone testosterone." },
+        { q:"Labia Minora",
+          a:"(F) The inner folds of skin that protect the vaginal and urethral openings." },
+        { q:"Prostate Gland",
+          a:"(M) Produces fluid that nourishes and protects sperm (part of semen)." },
+        { q:"Penis",
+          a:"(M) The external organ that delivers semen and passes urine." },
+        { q:"Clitoris",
+          a:"(F) A sensitive organ involved in sexual pleasure." },
+        { q:"Urethra",
+          a:"(Both M and F) The tube that carries urine out of the body. In males it also carries semen." },
+      ]},
+      { name: "Reproductive Health: Menstrual Cycle", cards: [
+        { q:"What marks the first day of a menstrual cycle?",
+          a:"The first day of menstrual bleeding (the first day of the period)." },
+        { q:"How long is an average menstrual cycle, and how long is the menstrual phase?",
+          a:"The average cycle is about 28 days. The menstrual phase (the bleeding/period) lasts about 3 to 7 days (around 5 on average)." },
+        { q:"What happens during the menstrual phase, and what causes menstruation to start?",
+          a:"During the menstrual phase, the thickened lining of the uterus (the endometrium) sheds and leaves the body through the vagina. It starts because hormone levels (estrogen and progesterone) drop when no pregnancy has occurred, which signals the lining to shed." },
+        { q:"Approximately when does phase 3 happen, what is it called, what happens, and what causes it?",
+          a:"Around day 14 (the middle of the cycle). It is called OVULATION: a mature egg is released from the ovary. It is caused by a surge in LH (luteinizing hormone).",
+          tip:"Cycle order: 1) Menstrual, 2) Follicular, 3) Ovulation, 4) Luteal." },
+        { q:"If the egg is NOT fertilized, what happens next?",
+          a:"Hormone levels drop, the uterine lining breaks down, and menstruation begins, the cycle starts over." },
+        { q:"If the egg IS fertilized, what happens next?",
+          a:"The fertilized egg implants in the uterine lining and pregnancy begins. The lining is kept (no period that month)." },
+      ]},
+      { name: "Reproductive Health: HIV / AIDS", cards: [
+        { q:"What do the acronyms HIV and AIDS stand for?",
+          a:"HIV = Human Immunodeficiency Virus. AIDS = Acquired Immunodeficiency Syndrome (the advanced stage HIV can lead to)." },
+        { q:"Name 4 symptoms of HIV.",
+          a:"Early symptoms are often flu-like: fever, fatigue/tiredness, swollen lymph nodes, sore throat, rash, muscle aches, and night sweats (name any four)." },
+        { q:"How is HIV transmitted?",
+          a:"Through certain body fluids: blood, semen, vaginal fluids, and breast milk. Common ways: unprotected sex, sharing needles, and from mother to baby. It is NOT spread by casual contact like hugging, sharing food, or toilet seats." },
+      ]},
+      { name: "Nutrition", cards: [
+        { q:"What 3 nutrients provide calories?",
+          a:"Carbohydrates, proteins, and fats." },
+        { q:"What is the difference between saturated and unsaturated fats?",
+          a:"Saturated fats are usually solid at room temperature (butter, animal fat) and are less healthy (raise 'bad' cholesterol). Unsaturated fats are usually liquid at room temperature (olive oil, nuts, fish) and are the healthier choice." },
+        { q:"What do proteins do for the body?",
+          a:"They build and repair tissues and muscle, and they help make enzymes, hormones, and parts of the immune system." },
+        { q:"Sugar is which type of carbohydrate?",
+          a:"A simple carbohydrate." },
+        { q:"Provide an example of a complex carbohydrate.",
+          a:"Whole grains, bread, pasta, rice, beans, potatoes, or vegetables." },
+        { q:"What are the 6 essential nutrients? Give an example of each.",
+          a:"1. Carbohydrates (bread/rice). 2. Proteins (meat/beans). 3. Fats (oil/nuts). 4. Vitamins (fruits/vegetables, like vitamin C in oranges). 5. Minerals (calcium in milk, iron in spinach). 6. Water (water).",
+          tip:"Carbs, Proteins, Fats, Vitamins, Minerals, Water." },
+        { q:"How many calories are in each gram of protein, carbohydrates, and fat?",
+          a:"Protein = 4 calories per gram. Carbohydrates = 4 calories per gram. Fat = 9 calories per gram.",
+          tip:"4, 4, 9. Fat has the most (9); carbs and protein tie at 4." },
+        { q:"What are the 5 food groups and the recommended amount for each?",
+          a:"Fruits, Vegetables, Grains, Protein, and Dairy. Recommended amounts (MyPlate): make HALF your plate fruits and vegetables, about a QUARTER grains (at least half whole grains), a QUARTER protein, plus a serving of dairy on the side." },
+      ]},
+      { name: "Nutrition: Food Label Math (chicken pasta product)", cards: [
+        { q:"What is the serving size for this product?",
+          a:"1 cup (249g), and there are about 2 servings per container." },
+        { q:"How many calories come from fat? (show your work)",
+          a:"12g of fat x 9 calories/gram = 108 calories from fat (the label rounds it to about 110).",
+          tip:"Fat = 9 cal/gram." },
+        { q:"How many calories come from protein? (show your work)",
+          a:"10g of protein x 4 calories/gram = 40 calories from protein." },
+        { q:"How many calories come from carbohydrates? (show your work)",
+          a:"24g of carbs x 4 calories/gram = 96 calories from carbohydrates." },
+        { q:"If you ate the whole bag, how many calories would you consume?",
+          a:"250 calories per serving x 2 servings = 500 calories." },
+        { q:"What vitamins and minerals are present in this product?",
+          a:"Vitamins: Vitamin A (0%) and Vitamin C (0%), so essentially none. Minerals: Calcium (6%) and Iron (8%)." },
+        { q:"Are there any allergens in the product?",
+          a:"Yes: wheat (enriched pasta/wheat flour), egg (egg white and whole egg solids), milk (cream, cheeses, butter), and soy (soybean oil, isolated soy protein)." },
+        { q:"What 3 ingredients are highest in weight in this product?",
+          a:"Water, chicken stock, and enriched pasta.",
+          why:"Ingredients are always listed in order from most to least by weight, so the first three are the heaviest." },
+      ]},
+      { name: "Nutrition: Reading the V8 Splash Label", cards: [
+        { q:"What does the V8 Splash label TRY to portray about the product? List multiple things.",
+          a:"That it is healthy, fruity, and natural: the name 'Fruit Medley,' the fruit imagery, the vegetable and fruit juice, and the list of added vitamins (C, B3, B6, B12) all make it seem nutritious and wholesome." },
+        { q:"What do we actually know about the makeup of this product based on the ingredients?",
+          a:"It is mostly water and concentrated carrot juice, with high fructose corn syrup (added sugar) listed high up, plus sucralose (artificial sweetener) and Red 40 (artificial dye). The real fruit juice is far down the list, so it is not very 'fruit-rich.'" },
+        { q:"Is the rich fruit content giving the juice its color, or something else?",
+          a:"Something else: the color comes mostly from Red 40 (an artificial dye), not from rich fruit content." },
+        { q:"The juice has 10g carbs per serving. Are they complex or simple carbs? What else does the label say?",
+          a:"Simple carbs (sugars). The label shows 9g of total sugars, and it says 9g are ADDED sugars (18% of the daily value), so almost all the carbs are added sugar." },
+      ]},
+      { name: "Nutrition: Digestive System", cards: [
+        { q:"Label the parts of the digestive system (Mouth, Esophagus, Stomach, Small intestine, Large intestine, Liver).",
+          a:"Order food travels: Mouth (top) leads to the Esophagus (the tube down to the stomach), then the Stomach (upper left), then the Small intestine (the long coiled tube in the center), then the Large intestine (the wider tube that frames the small intestine). The Liver is the large organ in the upper right (an accessory organ that makes bile).",
+          tip:"Path: Mouth, Esophagus, Stomach, Small intestine, Large intestine. Try 'My Elephant Sometimes Sits Late.'" },
+        { q:"What are the three parts of the small intestine?",
+          a:"Duodenum, Jejunum, and Ileum.",
+          tip:"D-J-I, in that order: 'Dow Jones Industrial.'" },
+        { q:"What are the four parts of the large intestine?",
+          a:"The four sections of the colon: Ascending colon, Transverse colon, Descending colon, and Sigmoid colon. (Some classes list it as cecum, colon, rectum, and anus, check your notes for which version was taught.)" },
+      ]},
+      { name: "Drugs: Vaping, Alcohol & Your Project", cards: [
+        { q:"List 3 harmful effects of vaping.",
+          a:"Any three of: lung damage and breathing problems, nicotine addiction, increased heart rate and blood pressure, harm to the developing teen brain, and exposure to harmful chemicals." },
+        { q:"Name 2 harmful effects of alcohol on the body.",
+          a:"Any two of: liver damage, impaired judgment and coordination, harm to the brain, addiction, and poor or risky decisions." },
+        { q:"What drug did you research for your project?",
+          a:"YOUR ANSWER: fill in the drug you chose for your project." },
+        { q:"What type (classification) of drug was this?",
+          a:"YOUR ANSWER: name the category (for example: stimulant, depressant, opioid, hallucinogen, or inhalant) that matches the drug you researched." },
+        { q:"Provide 3 things you learned about this drug during your research.",
+          a:"YOUR ANSWER: list 3 facts from your own project (for example: how it affects the body, its short and long-term effects, how addictive it is, and its legal status)." },
+      ]},
+    ]
+  }
+};
+
+/* ============================ APP ============================ */
+const $ = s => document.querySelector(s);
+let current = "biology";
+let mode = "practice";
+let unitIdx = -1;          // -1 = all units
+let pstate = "hero";       // practice sub-state: hero | round | win
+
+const tabs = document.querySelectorAll(".tab");
+const modeBtns = document.querySelectorAll(".mode");
+const unitSel = $("#unitSel");
+
+/* ---- progress: in-memory truth, best-effort save (never breaks if storage is blocked) ---- */
+let PROGRESS = (function(){ try { return JSON.parse(localStorage.getItem("studyProgress") || "{}") || {}; } catch(e){ return {}; } })();
+function saveProgress(){ try { localStorage.setItem("studyProgress", JSON.stringify(PROGRESS)); } catch(e){} }
+function isMastered(id){ return !!PROGRESS[id]; }
+function setMastered(id, v){ if(v) PROGRESS[id] = 1; else delete PROGRESS[id]; saveProgress(); }
+function resetSubject(sub){ subjectCards(sub).forEach(function(c){ delete PROGRESS[c.id]; }); saveProgress(); }
+function subjectStats(sub){
+  var all = subjectCards(sub), m = 0;
+  all.forEach(function(c){ if(isMastered(c.id)) m++; });
+  return { mastered:m, total:all.length, pct: all.length ? Math.round(m/all.length*100) : 0 };
+}
+
+function subjectCards(sub){
+  var out = [];
+  DATA[sub].units.forEach(function(u, ui){
+    u.cards.forEach(function(c, ci){ out.push(Object.assign({}, c, { unit:u.name, id: sub+":"+ui+":"+ci })); });
+  });
+  return out;
+}
+function activeCards(){
+  var all = subjectCards(current);
+  if(unitIdx === -1) return all;
+  var uname = DATA[current].units[unitIdx].name;
+  return all.filter(function(c){ return c.unit === uname; });
+}
+
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function fmt(s){ return esc(s).replace(/\n/g,"<br>"); }
+function answerBody(c){
+  if(/^YOUR ANSWER/.test(c.a)){
+    return '<span class="youranswer">YOUR ANSWER</span> ' + fmt(c.a.replace(/^YOUR ANSWER:?\s*/,""));
+  }
+  return fmt(c.a);
+}
+function calloutHTML(c){
+  var h = "";
+  if(c.why) h += '<div class="callout why"><span class="tag">Why</span>'+fmt(c.why)+'</div>';
+  if(c.tip) h += '<div class="callout tip"><span class="tag">Memory trick</span>'+fmt(c.tip)+'</div>';
+  return h;
+}
+function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor((i+1)*pseudo()); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+var _seed = 7; function pseudo(){ _seed = (_seed*9301+49297)%233280; return _seed/233280; }
+
+/* ---- controls ---- */
+tabs.forEach(function(t){ t.addEventListener("click", function(){
+  current = t.dataset.s;
+  tabs.forEach(function(x){ x.classList.toggle("on", x === t); });
+  document.documentElement.style.setProperty("--accent", DATA[current].color);
+  unitIdx = -1; pstate = "hero";
+  buildUnitSelect(); render();
+}); });
+modeBtns.forEach(function(b){ b.addEventListener("click", function(){ switchMode(b.dataset.m); }); });
+unitSel.addEventListener("change", function(){ unitIdx = parseInt(unitSel.value,10); pstate = "hero"; render(); });
+
+function switchMode(m){
+  mode = m;
+  modeBtns.forEach(function(x){ x.classList.toggle("on", x.dataset.m === m); });
+  render();
+}
+function buildUnitSelect(){
+  var u = DATA[current].units;
+  var html = '<option value="-1">All units</option>';
+  u.forEach(function(unit,i){ html += '<option value="'+i+'">'+esc(unit.name)+'</option>'; });
+  unitSel.innerHTML = html;
+  unitSel.value = "-1";
+}
+
+/* ---- PRACTICE: bite-sized rounds, the low-friction default ---- */
+var round = [], rpos = 0, roundGot = 0, streak = 0;
+
+function ringSVG(pct){
+  var r = 42, c = 2*Math.PI*r, off = c*(1 - pct/100);
+  return '<svg class="ring" width="112" height="112" viewBox="0 0 112 112" aria-hidden="true">'
+    + '<circle cx="56" cy="56" r="'+r+'" fill="none" stroke="#e6eaee" stroke-width="9"/>'
+    + '<circle cx="56" cy="56" r="'+r+'" fill="none" stroke="var(--accent)" stroke-width="9" stroke-linecap="round" '
+    +   'stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 56 56)"/>'
+    + '<text x="56" y="64" text-anchor="middle" font-size="26" font-weight="800" fill="var(--accent)">'+pct+'%</text>'
+    + '</svg>';
+}
+function renderPractice(){
+  if(pstate === "round") return practiceRound();
+  if(pstate === "win") return practiceWin();
+  return practiceHero();
+}
+function practiceHero(){
+  var st = subjectStats(current);
+  var pool = activeCards();
+  var remaining = pool.filter(function(c){ return !isMastered(c.id); }).length;
+  var allDone = remaining === 0 && pool.length > 0;
+  var scopeNote = (unitIdx === -1) ? "" : ' &middot; ' + esc(DATA[current].units[unitIdx].name);
+  var html = '<div class="hero">'
+    + ringSVG(st.pct)
+    + '<h2>'+esc(DATA[current].name)+'</h2>'
+    + '<p class="stat">'+st.mastered+' of '+st.total+' mastered'+scopeNote+'</p>'
+    + '<button class="start-btn" id="startBtn">'+(allDone ? "Do a refresher round" : "Start a quick round")
+    +   '<small>'+(allDone ? "you have got them all, just keep them fresh" : "5 questions, about 2 minutes")+'</small></button>'
+    + '<p class="lowkey">No pressure. One round counts as a win, and you can stop whenever you want.</p>'
+    + '<div class="hero-opts"><button class="btn" id="toFlash">Flashcards</button><button class="btn" id="toAnswers">See answers</button></div>'
+    + (st.mastered > 0 ? '<button class="reset-link" id="resetBtn">reset my progress for '+esc(DATA[current].name)+'</button>' : '')
+    + '</div>';
+  $("#practice-view").innerHTML = html;
+  $("#startBtn").addEventListener("click", startRound);
+  $("#toFlash").addEventListener("click", function(){ switchMode("flash"); });
+  $("#toAnswers").addEventListener("click", function(){ switchMode("answers"); });
+  var rb = $("#resetBtn");
+  if(rb) rb.addEventListener("click", function(){ resetSubject(current); pstate = "hero"; renderPractice(); });
+}
+function buildRound(){
+  var pool = activeCards();
+  if(!pool.length) return [];
+  var un = pool.filter(function(c){ return !isMastered(c.id); });
+  shuffle(un);
+  var r = un.slice(0,5);
+  if(r.length < 5){ var mas = pool.filter(function(c){ return isMastered(c.id); }); shuffle(mas); r = r.concat(mas.slice(0, 5 - r.length)); }
+  return r;
+}
+function startRound(){ round = buildRound(); rpos = 0; roundGot = 0; streak = 0; pstate = "round"; renderPractice(); }
+function practiceRound(){
+  if(!round.length){ pstate = "hero"; return practiceHero(); }
+  var c = round[rpos];
+  var dots = "";
+  for(var i=0;i<round.length;i++){ dots += '<i class="'+(i<rpos?"on":"")+(i===rpos?" now":"")+'"></i>'; }
+  var streakHTML = streak >= 2 ? '<span class="streak">'+streak+' in a row</span>' : '<span></span>';
+  $("#practice-view").innerHTML =
+    '<div class="round-top"><div class="dotrow">'+dots+'</div>'+streakHTML+'</div>'
+    + '<div class="qcard" id="qc"><p class="qtext">'+fmt(c.q)+'</p>'
+    +   '<div class="answer"><b>Answer:</b><br>'+answerBody(c)+calloutHTML(c)+'</div>'
+    +   '<div id="qreveal"><button class="btn big" id="showBtn">Show answer</button></div>'
+    +   '<div class="qbtns hide" id="qgrade"><button class="btn rev" id="missBtn">Still learning</button>'
+    +     '<button class="btn good" id="gotBtn">Got it</button></div>'
+    + '</div>';
+  $("#showBtn").addEventListener("click", function(){
+    $("#qc").classList.add("revealed");
+    $("#qreveal").classList.add("hide");
+    $("#qgrade").classList.remove("hide");
+  });
+  $("#gotBtn").addEventListener("click", function(){ setMastered(c.id, true); roundGot++; streak++; advanceRound(); });
+  $("#missBtn").addEventListener("click", function(){ setMastered(c.id, false); streak = 0; advanceRound(); });
+}
+function advanceRound(){ rpos++; if(rpos >= round.length) pstate = "win"; renderPractice(); }
+function practiceWin(){
+  var st = subjectStats(current);
+  var msgs = ["Nice, that round is done.", "That counts. Good work.", "Every round adds up.", "You showed up. That matters."];
+  var msg = msgs[(st.mastered + roundGot) % msgs.length];
+  var perfect = (roundGot === round.length && round.length > 0) ? '<p class="win-msg">You got all '+round.length+' this round.</p>' : "";
+  $("#practice-view").innerHTML =
+    '<div class="winscreen"><div class="win-check">&#10003;</div>'
+    + '<p class="win-h">Round complete</p>'
+    + '<p class="win-msg">'+msg+'</p>'
+    + perfect
+    + '<p class="win-stat">Got <b>'+roundGot+' of '+round.length+'</b> this round &middot; <b>'+st.mastered+' of '+st.total+'</b> mastered in '+esc(DATA[current].name)+'</p>'
+    + '<button class="start-btn" id="againBtn">One more round<small>keep the momentum going</small></button>'
+    + '<div class="hero-opts"><button class="btn" id="doneBtn">I am good for now</button><button class="btn" id="toFlash2">Flashcards</button></div>'
+    + '</div>';
+  $("#againBtn").addEventListener("click", startRound);
+  $("#doneBtn").addEventListener("click", function(){ pstate = "hero"; renderPractice(); });
+  $("#toFlash2").addEventListener("click", function(){ switchMode("flash"); });
+}
+
+/* ---- FLASHCARDS ---- */
+var fcOrder = [], fcPos = 0;
+function renderFlash(){
+  var cards = activeCards();
+  fcOrder = cards.map(function(_,i){ return i; });
+  fcPos = 0;
+  drawFlash(cards);
+}
+function drawFlash(cards){
+  if(!cards.length){ $("#flash-view").innerHTML = "<p>No cards.</p>"; return; }
+  var c = cards[fcOrder[fcPos]];
+  var back = '<div class="text">'+answerBody(c)+'</div>'+calloutHTML(c);
+  $("#flash-view").innerHTML =
+    '<div class="fc-wrap">'
+    + '<div class="fc-count">Card '+(fcPos+1)+' of '+cards.length+' &middot; '+esc(c.unit)+'</div>'
+    + '<div class="flashcard" id="theCard"><div class="fc-inner">'
+    +   '<div class="fc-face fc-front"><span class="lbl">Question</span><div class="text">'+fmt(c.q)+'</div></div>'
+    +   '<div class="fc-face fc-back"><span class="lbl">Answer</span>'+back+'</div>'
+    + '</div></div>'
+    + '<div class="tap-hint">Tap the card to flip it</div>'
+    + '<div class="fc-nav"><button class="btn" id="fcPrev">&larr; Back</button>'
+    +   '<button class="btn" id="fcShuf">Shuffle</button>'
+    +   '<button class="btn" id="fcNext">Next &rarr;</button></div>'
+    + '</div>';
+  $("#theCard").addEventListener("click", function(){ $("#theCard").classList.toggle("flip"); });
+  $("#fcPrev").addEventListener("click", function(){ if(fcPos>0){ fcPos--; drawFlash(cards); } });
+  $("#fcNext").addEventListener("click", function(){ if(fcPos<cards.length-1){ fcPos++; } else { fcPos=0; } drawFlash(cards); });
+  $("#fcShuf").addEventListener("click", function(){ shuffle(fcOrder); fcPos=0; drawFlash(cards); });
+}
+
+/* ---- ANSWERS (full key; collapsed on screen, fully expanded for print) ---- */
+function renderAnswers(){
+  var u = DATA[current].units;
+  var units = (unitIdx === -1) ? u.map(function(unit,i){ return {unit:unit,i:i}; }) : [{unit:u[unitIdx], i:unitIdx}];
+  var html = "";
+  units.forEach(function(o){
+    var unit = o.unit, body = "";
+    unit.cards.forEach(function(c,n){
+      body += '<div class="qa"><p class="q"><span class="num">'+(n+1)+'.</span> '+fmt(c.q)+'</p>'
+            + '<p class="a">'+answerBody(c)+'</p>'+calloutHTML(c)+'</div>';
+    });
+    html += '<div class="unit closed"><div class="unit-h" onclick="this.parentNode.classList.toggle(\'closed\')">'
+          + esc(unit.name)+'<span class="chev">&#9660;</span></div><div class="unit-body">'+body+'</div></div>';
+  });
+  $("#answers-view").innerHTML = html;
+}
+
+/* ---- main render ---- */
+function render(){
+  $("#head-title").textContent = DATA[current].label;
+  $("#print-title").textContent = DATA[current].label + " - Answer Key";
+  $("#print-sub").textContent = "Complete study guide with answers, reasoning, and memory tricks.";
+  $("#practice-view").classList.toggle("hide", mode!=="practice");
+  $("#flash-view").classList.toggle("hide", mode!=="flash");
+  $("#answers-view").classList.toggle("hide", mode!=="answers");
+  if(mode==="practice") renderPractice();
+  if(mode==="flash") renderFlash();
+  if(mode==="answers") renderAnswers();
+}
+
+/* Make printing reliable: always regenerate the FULL current-subject answer key
+   (all units) before the print dialog opens, no matter which mode is on screen.
+   Works for the Print button and for Cmd/Ctrl+P. */
+window.addEventListener("beforeprint", function(){
+  var savedUnit = unitIdx;
+  unitIdx = -1;
+  $("#print-title").textContent = DATA[current].label + " - Answer Key";
+  $("#print-sub").textContent = "Complete study guide with answers, reasoning, and memory tricks.";
+  renderAnswers();
+  unitIdx = savedUnit;
+});
+
+buildUnitSelect();
+document.documentElement.style.setProperty("--accent", DATA[current].color);
+render();
+</script>
+</body>
+</html>
