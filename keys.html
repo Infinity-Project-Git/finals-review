@@ -110,10 +110,10 @@ his own opinion or a drawing is left to him and marked as his to supply.</p>
     .then(function(text){
       /* The sheet holds one cell of JSON. CSV wraps it in quotes and doubles the
          inner ones, so unwrap before parsing. */
-      var body = text.replace(/^[^
-]*
-/, "").trim();
-      if(body.charAt(0) === '"') body = body.slice(1, -1).replace(/""/g, '"');
+      var NL = String.fromCharCode(10);
+      var cut = text.indexOf(NL);
+      var body = (cut > -1 ? text.slice(cut + 1) : text).trim();
+      if(body.charAt(0) === '"') body = body.slice(1, -1).split('""').join('"');
       if(!body) { fail("No activity recorded yet."); return; }
       var d = JSON.parse(body);
       document.getElementById('progmiss').style.display = 'none';
