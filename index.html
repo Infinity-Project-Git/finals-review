@@ -625,6 +625,12 @@ var TASKS = [
       "Open \"W-Classification Notes & Venn Diagram\".",
       "Do the notetaking guide and the Venn diagram comparing two stuffed animals.",
       "Hit Turn in." ]},
+  { id:"zo-constitution", due:"2026-09-17", cls:"zoo", title:"Constitution Day questions", mins:20, steps:[
+      "Open Zoology in Google Classroom.",
+      "Open \"9/17 Student Questions: Constitution Day-Farm Bill\".",
+      "Read the reading she attached. It is about the Farm Bill.",
+      "Answer the questions. There is a paper copy too if one made it home.",
+      "Hit Turn in." ]},
   { id:"wh-bears", due:"2026-09-18", cls:"hist", title:"Bears in Government", mins:15, steps:[
       "Open World History in Google Classroom.",
       "Open \"Bears in Government\". The Doc is already yours.",
@@ -1037,7 +1043,29 @@ function renderList(){
     html += '<div class="empty"><b>Nothing on the list</b>No assignments are loaded yet.</div>';
   } else {
     html += '<p class="counter">'+done.length+' of '+TASKS.length+' done</p>';
-    if(open.length) html += '<div class="rows">'+open.map(function(t){ return row(t,false); }).join("")+'</div>';
+    /* Grouped so upcoming work does not read as late. Headings appear only when there
+       is more than one group: right now everything is overdue and every row already
+       says "Was due ...", so a lone OVERDUE banner would add weight, not information. */
+    var today0 = new Date(); today0.setHours(0,0,0,0);
+    var daysTo = function(iso){
+      if(!iso) return null;
+      var q = iso.split("-");
+      return Math.round((new Date(+q[0], +q[1]-1, +q[2]) - today0) / 86400000);
+    };
+    var groups = [
+      { name:"Overdue",   pick:function(n){ return n !== null && n < 0; } },
+      { name:"Due soon",  pick:function(n){ return n !== null && n >= 0 && n <= 7; } },
+      { name:"Later",     pick:function(n){ return n !== null && n > 7; } },
+      { name:"No due date", pick:function(n){ return n === null; } }
+    ].map(function(g){
+      g.items = open.filter(function(t){ return g.pick(daysTo(t.due)); });
+      return g;
+    }).filter(function(g){ return g.items.length; });
+
+    groups.forEach(function(g){
+      if(groups.length > 1) html += '<p class="grouphead">'+g.name+'</p>';
+      html += '<div class="rows">'+g.items.map(function(t){ return row(t,false); }).join("")+'</div>';
+    });
     if(done.length){
       html += '<p class="grouphead">Finished</p>'
            +  '<div class="rows">'+done.map(function(t){ return row(t,true); }).join("")+'</div>';
