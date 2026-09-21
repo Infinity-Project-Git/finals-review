@@ -156,6 +156,19 @@
   .keylist .isnew{font-size:10.5px; font-weight:800; letter-spacing:.5px;
     background:#1d6fb8; color:#fff; border-radius:3px; padding:1px 5px;}
   .keylist .allrow a{opacity:.72; font-size:14px;}
+  .linkrow{display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:0;}
+  .linkrow .linkbtn{display:inline-block; margin:0;}
+  .linkdot{color:var(--muted); font-size:13.5px; user-select:none;}
+  .sechead{font-size:12px; letter-spacing:.8px; text-transform:uppercase; color:var(--muted);
+    font-weight:700; margin:22px 0 8px; text-align:center;}
+  .seclist{display:flex; flex-direction:column; gap:7px; margin:0 0 4px;}
+  .sec{display:flex; align-items:center; gap:10px; width:100%; text-align:left; cursor:pointer;
+    border:1px solid var(--line); background:#fff; border-radius:11px; padding:12px 13px;
+    font-family:inherit; font-size:13.5px; color:var(--ink); min-height:44px;}
+  .sec:hover{border-color:var(--accent);}
+  .sec:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+  .secname{flex:1 1 auto; font-weight:650; line-height:1.3;}
+  .sec .cbar{flex:0 0 52px;}
 </style>
 </head>
 <body>
@@ -675,15 +688,42 @@ function prettyDay(){
 }
 
 /* ---- card helpers ---- */
-function classCards(key){
+function classCards(key, unitIdx){
   var out = [];
   (CLASSES[key].units || []).forEach(function(u, ui){
+    /* unitIdx scopes the pool to one section. The id below still uses the real
+       ui, so "done" survives filtering. Never renumber it. */
+    if(typeof unitIdx === "number" && ui !== unitIdx) return;
     (u.cards || []).forEach(function(c, ci){
       out.push({ q:c.q, a:c.a, why:c.why, tip:c.tip, unit:u.name, cls:key, id: key+":"+ui+":"+ci });
     });
   });
   return out;
 }
+/* One tappable row per section, so a Friday quiz on one unit can be drilled on its
+   own. He is five weeks behind: mixing five units into one round is how a deck stops
+   being useful. Sections with no cards are dropped rather than shown empty. */
+function sectionList(key){
+  var units = CLASSES[key].units || [];
+  var rows = units.map(function(u, ui){
+    var us = unitStats(key, ui);
+    if(!us.total) return "";
+    return '<button class="sec" data-u="'+ui+'" style="--accent:'+CLASSES[key].color+'">'
+      + '<span class="secname">'+esc(u.name)+'</span>'
+      + '<span class="cbar"><i style="width:'+us.pct+'%"></i></span>'
+      + '<span class="cnum">'+us.mastered+'/'+us.total+'</span>'
+      + '</button>';
+  }).join("");
+  if(!rows) return "";
+  return '<p class="sechead">Or pick one section</p><div class="seclist">'+rows+'</div>';
+}
+
+function unitStats(key, ui){
+  var all = classCards(key, ui), m = 0;
+  all.forEach(function(c){ if(isMastered(c.id)) m++; });
+  return { mastered:m, total:all.length, pct: all.length ? Math.round(m/all.length*100) : 0 };
+}
+
 function classStats(key){
   var all = classCards(key), m = 0;
   all.forEach(function(c){ if(isMastered(c.id)) m++; });
@@ -757,6 +797,7 @@ function ensureDay(){
 var view = "today";     // today | list | detail | round | win | dayend | practice | checkin
 var detailId = null;    // which task the detail view is showing
 var pclass = null;      // class key when practising on my own
+var punit  = null;      // unit index when drilling one section, null = whole class
 var round = [], rpos = 0, roundGot = 0, roundFromPlan = false;
 
 function setHeader(eyebrow, title, showDots){
@@ -967,6 +1008,29 @@ function wireListLink(){
   var b = $("#seeAllBtn");
   if(b) b.addEventListener("click", function(){ view = "list"; render(); });
 }
+
+/* Today only. "see everything" plus a quiet way into free practice, so a quiz on
+   Friday does not mean clearing the whole day first to reach it. Still a link and
+   not a tab: a permanent tab is a standing invitation to look at the pile. Falls
+   back to the plain list link if no class has cards yet. */
+function todayLinks(){
+  var any = Object.keys(CLASSES).some(function(k){ return classCards(k).length > 0; });
+  if(!any) return listLink();
+  return '<div class="linkrow">'
+    + '<button class="linkbtn" id="seeAllBtn">see everything</button>'
+    + '<span class="linkdot" aria-hidden="true">&middot;</span>'
+    + '<button class="linkbtn" id="practiceLink">practice something else</button>'
+    + '</div>';
+}
+function wireTodayLinks(){
+  wireListLink();
+  var b = $("#practiceLink");
+  if(b) b.addEventListener("click", function(){
+    view = "practice";
+    pclass = pclass || neediestClass();
+    render();
+  });
+}
 function backToTodayLink(){
   return '<button class="linkbtn backlink" id="toTodayBtn">back to today</button>';
 }
@@ -1003,8 +1067,8 @@ function renderToday(){
       },
       onSecond: function(){ d.pos++; saveDay(); render(); }
     });
-    APP.insertAdjacentHTML("beforeend", listLink());
-    wireListLink();
+    APP.insertAdjacentHTML("beforeend", todayLinks());
+    wireTodayLinks();
     return;
   }
 
@@ -1022,15 +1086,15 @@ function renderToday(){
     +   '</div>'
     + '</div>'
     + '<p class="lowkey">Stop whenever you want. Anything you do counts.</p>';
-  APP.insertAdjacentHTML("beforeend", listLink());
+  APP.insertAdjacentHTML("beforeend", todayLinks());
   $("#startBtn").addEventListener("click", function(){ startRound(k, true); });
   $("#skipBtn").addEventListener("click", function(){ d.pos++; saveDay(); render(); });
-  wireListLink();
+  wireTodayLinks();
 }
 
 /* ---------------- Round ---------------- */
-function buildRound(k){
-  var pool = classCards(k);
+function buildRound(k, unitIdx){
+  var pool = classCards(k, unitIdx);
   if(!pool.length) return [];
   var un = pool.filter(function(c){ return !isMastered(c.id); });
   shuffle(un);
@@ -1042,8 +1106,9 @@ function buildRound(k){
   }
   return r;
 }
-function startRound(k, fromPlan){
-  round = buildRound(k); rpos = 0; roundGot = 0; pclass = k;
+function startRound(k, fromPlan, unitIdx){
+  round = buildRound(k, unitIdx); rpos = 0; roundGot = 0; pclass = k;
+  punit = (typeof unitIdx === "number") ? unitIdx : null;
   roundFromPlan = !!fromPlan;
   if(!round.length){ view = fromPlan ? "today" : "practice"; return render(); }
   view = "round"; render();
@@ -1052,7 +1117,8 @@ function renderRound(){
   var cl = CLASSES[pclass], c = round[rpos];
   var dots = "";
   for(var i=0;i<round.length;i++){ dots += '<i class="'+(i<rpos?"on":"")+(i===rpos?" now":"")+'"></i>'; }
-  $("#eyebrow").textContent = cl.name;
+  var us = (typeof punit === "number" && (cl.units||[])[punit]) ? (cl.units[punit].name || "") : "";
+  $("#eyebrow").textContent = us || cl.name;
   $("#title").textContent = "Question " + (rpos+1) + " of " + round.length;
   $("#daterow").innerHTML = '<div class="dotrow" aria-hidden="true">'+dots+'</div>';
 
@@ -1201,14 +1267,20 @@ function renderPractice(){
     +   ringSVG(st.pct, cl.color)
     +   '<p class="classname">'+esc(cl.name)+'</p>'
     +   '<p class="classstat">'+st.mastered+' of '+st.total+' known</p>'
-    +   '<button class="btn primary" id="goBtn">Start a round<small>'+ROUND_SIZE+' questions, about 2 minutes</small></button>'
+    +   '<button class="btn primary" id="goBtn">Start a round<small>anything in '+esc(cl.name)+'</small></button>'
     + '</div>'
+    + sectionList(pclass)
     + '<button class="linkbtn" id="backBtn">back to today</button>';
 
   document.querySelectorAll(".tab").forEach(function(t){
-    t.addEventListener("click", function(){ pclass = t.dataset.k; render(); });
+    t.addEventListener("click", function(){ pclass = t.dataset.k; punit = null; render(); });
   });
   $("#goBtn").addEventListener("click", function(){ startRound(pclass, false); });
+  document.querySelectorAll(".sec").forEach(function(b){
+    b.addEventListener("click", function(){
+      startRound(pclass, false, parseInt(b.dataset.u, 10));
+    });
+  });
   $("#backBtn").addEventListener("click", function(){ view = "today"; render(); });
 }
 
