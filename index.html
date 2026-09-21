@@ -156,9 +156,6 @@
   .keylist .isnew{font-size:10.5px; font-weight:800; letter-spacing:.5px;
     background:#1d6fb8; color:#fff; border-radius:3px; padding:1px 5px;}
   .keylist .allrow a{opacity:.72; font-size:14px;}
-  .linkrow{display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:0;}
-  .linkrow .linkbtn{display:inline-block; margin:0;}
-  .linkdot{color:var(--muted); font-size:13.5px; user-select:none;}
   .sechead{font-size:12px; letter-spacing:.8px; text-transform:uppercase; color:var(--muted);
     font-weight:700; margin:22px 0 8px; text-align:center;}
   .seclist{display:flex; flex-direction:column; gap:7px; margin:0 0 4px;}
@@ -175,6 +172,13 @@
   .swtabs{margin:0 0 2px; justify-content:center;}
   .swtabs .tab{flex:0 1 auto; font-size:13px; padding:9px 12px;}
   .syncnote{margin-top:14px; font-size:12.5px; opacity:.85;}
+  .segwrap{margin-top:12px;}
+  .seg{display:flex; background:var(--line2); border-radius:999px; padding:3px; gap:3px;}
+  .segbtn{flex:1 1 50%; border:none; background:none; cursor:pointer; font-family:inherit;
+    font-size:14.5px; font-weight:650; color:var(--muted); padding:9px 10px; border-radius:999px;
+    min-height:44px; transition:background .15s, color .15s;}
+  .segbtn.on{background:var(--ink); color:#fff;}
+  .segbtn:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
 </style>
 </head>
 <body>
@@ -184,6 +188,7 @@
     <p class="eyebrow" id="eyebrow">Semester 1</p>
     <h1 id="title">Today</h1>
     <div class="daterow" id="daterow"></div>
+    <div class="segwrap" id="segwrap"></div>
   </div>
 </header>
 
@@ -842,6 +847,26 @@ var punit  = null;      // unit index when drilling one section, null = whole cl
 var taskPick = false;   // is the "different class" chooser open on the task step
 var round = [], rpos = 0, roundGot = 0, roundFromPlan = false;
 
+function setToggle(active){
+  var w = $("#segwrap");
+  if(!w) return;
+  if(!active){ w.innerHTML = ""; return; }
+  w.innerHTML = '<div class="seg" role="tablist" aria-label="Assignments or practice">'
+    + '<button class="segbtn'+(active === "today" ? " on" : "")+'" data-v="today" role="tab"'
+    +   ' aria-selected="'+(active === "today")+'">Assignments</button>'
+    + '<button class="segbtn'+(active === "practice" ? " on" : "")+'" data-v="practice" role="tab"'
+    +   ' aria-selected="'+(active === "practice")+'">Practice</button>'
+    + '</div>';
+  w.querySelectorAll(".segbtn").forEach(function(b){
+    b.addEventListener("click", function(){
+      var v = b.dataset.v;
+      if(v === view) return;
+      if(v === "practice"){ pclass = pclass || neediestClass(); }
+      view = v; render();
+    });
+  });
+}
+
 function setHeader(eyebrow, title, showDots){
   $("#eyebrow").textContent = eyebrow;
   $("#title").textContent = title;
@@ -858,6 +883,7 @@ function setHeader(eyebrow, title, showDots){
 function demoBar(){ return DEMO ? '<div class="demobar">Sample content, for testing the app only</div>' : ""; }
 
 function render(){
+  setToggle(null);   /* views opt in below; everything else gets no toggle */
   if(view === "round")    return renderRound();
   if(view === "win")      return renderWin();
   if(view === "dayend")   return renderDayEnd();
@@ -1052,10 +1078,6 @@ function wireListLink(){
   if(b) b.addEventListener("click", function(){ view = "list"; render(); });
 }
 
-/* Today only. "see everything" plus a quiet way into free practice, so a quiz on
-   Friday does not mean clearing the whole day first to reach it. Still a link and
-   not a tab: a permanent tab is a standing invitation to look at the pile. Falls
-   back to the plain list link if no class has cards yet. */
 /* Shown on Today whenever PING_URL is set. The rule from the day this app was built:
    sync is never silent. A kid with demand avoidance who discovers he was being measured
    without being told stops opening the app, and then there is no data at all. */
@@ -1064,24 +1086,6 @@ function syncNotice(){
   return '<p class="lowkey syncnote">Mom and dad can see how this is going.</p>';
 }
 
-function todayLinks(){
-  var any = Object.keys(CLASSES).some(function(k){ return classCards(k).length > 0; });
-  if(!any) return listLink();
-  return '<div class="linkrow">'
-    + '<button class="linkbtn" id="seeAllBtn">see everything</button>'
-    + '<span class="linkdot" aria-hidden="true">&middot;</span>'
-    + '<button class="linkbtn" id="practiceLink">practice something else</button>'
-    + '</div>';
-}
-function wireTodayLinks(){
-  wireListLink();
-  var b = $("#practiceLink");
-  if(b) b.addEventListener("click", function(){
-    view = "practice";
-    pclass = pclass || neediestClass();
-    render();
-  });
-}
 function backToTodayLink(){
   return '<button class="linkbtn backlink" id="toTodayBtn">back to today</button>';
 }
@@ -1101,6 +1105,7 @@ function renderToday(){
 
   var d = ensureDay();
   setHeader("Semester 1", "Today", true);
+  setToggle("today");
 
   if(d.pos >= d.plan.length){ view = "dayend"; return renderDayEnd(); }
 
@@ -1121,8 +1126,8 @@ function renderToday(){
     });
     wireTaskSwitcher(d, step);
     APP.insertAdjacentHTML("beforeend", syncNotice());
-    APP.insertAdjacentHTML("beforeend", todayLinks());
-    wireTodayLinks();
+    APP.insertAdjacentHTML("beforeend", listLink());
+    wireListLink();
     return;
   }
 
@@ -1141,10 +1146,10 @@ function renderToday(){
     + '</div>'
     + '<p class="lowkey">Stop whenever you want. Anything you do counts.</p>';
   APP.insertAdjacentHTML("beforeend", syncNotice());
-  APP.insertAdjacentHTML("beforeend", todayLinks());
+  APP.insertAdjacentHTML("beforeend", listLink());
   $("#startBtn").addEventListener("click", function(){ startRound(k, true); });
   $("#skipBtn").addEventListener("click", function(){ d.pos++; saveDay(); render(); });
-  wireTodayLinks();
+  wireListLink();
 }
 
 /* ---------------- Round ---------------- */
@@ -1299,6 +1304,7 @@ function ringSVG(pct, color){
 }
 function renderPractice(){
   setHeader("Semester 1", "Practice", false);
+  setToggle("practice");
   var keys = Object.keys(CLASSES).filter(function(k){ return classCards(k).length > 0; });
   if(!keys.length){
     APP.innerHTML = '<div class="empty"><b>Nothing to practice yet</b>No questions have been added.</div>'
