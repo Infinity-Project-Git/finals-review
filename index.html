@@ -169,6 +169,12 @@
   .sec:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
   .secname{flex:1 1 auto; font-weight:650; line-height:1.3;}
   .sec .cbar{flex:0 0 52px;}
+  .swlink{margin-top:12px; font-size:13px;}
+  .swhead{font-size:11.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--muted);
+    font-weight:700; margin:16px 0 7px; text-align:center;}
+  .swtabs{margin:0 0 2px; justify-content:center;}
+  .swtabs .tab{flex:0 1 auto; font-size:13px; padding:9px 12px;}
+  .syncnote{margin-top:14px; font-size:12.5px; opacity:.85;}
 </style>
 </head>
 <body>
@@ -700,6 +706,41 @@ function classCards(key, unitIdx){
   });
   return out;
 }
+/* Lets him move to a different class for the next thing. Collapsed behind one quiet
+   link by default: naming four other classes with work outstanding, unprompted, is
+   showing him the pile, which is the one thing this screen must not do. Only classes
+   with an OPEN task appear, and only if there is more than one to choose from. */
+function taskSwitcher(currentId){
+  var seen = {}, keys = [];
+  openTasks().forEach(function(t){
+    if(t.id === currentId || seen[t.cls]) return;
+    seen[t.cls] = 1; keys.push(t.cls);
+  });
+  if(!keys.length) return "";
+  if(!taskPick) return '<button class="linkbtn swlink" id="swOpen">work on a different class</button>';
+  var chips = keys.map(function(k){
+    return '<button class="tab" data-k="'+k+'">'+esc(CLASSES[k].name)+'</button>';
+  }).join("");
+  return '<p class="swhead">Move to</p><div class="tabs swtabs">'+chips+'</div>'
+    + '<button class="linkbtn swlink" id="swClose">never mind</button>';
+}
+function wireTaskSwitcher(d, step){
+  var o = $("#swOpen");
+  if(o) o.addEventListener("click", function(){ taskPick = true; render(); });
+  var c = $("#swClose");
+  if(c) c.addEventListener("click", function(){ taskPick = false; render(); });
+  document.querySelectorAll(".swtabs .tab").forEach(function(b){
+    b.addEventListener("click", function(){
+      var next = openTasks().filter(function(t){ return t.cls === b.dataset.k; })[0];
+      if(!next) return;
+      /* Swap which task this step points at. The plan's LENGTH never changes, which is
+         what ensureDay's warning is about: pos indexes into it. */
+      step.taskId = next.id;
+      taskPick = false; saveDay(); render();
+    });
+  });
+}
+
 /* One tappable row per section, so a Friday quiz on one unit can be drilled on its
    own. He is five weeks behind: mixing five units into one round is how a deck stops
    being useful. Sections with no cards are dropped rather than shown empty. */
@@ -798,6 +839,7 @@ var view = "today";     // today | list | detail | round | win | dayend | practi
 var detailId = null;    // which task the detail view is showing
 var pclass = null;      // class key when practising on my own
 var punit  = null;      // unit index when drilling one section, null = whole class
+var taskPick = false;   // is the "different class" chooser open on the task step
 var round = [], rpos = 0, roundGot = 0, roundFromPlan = false;
 
 function setHeader(eyebrow, title, showDots){
@@ -844,6 +886,7 @@ function drawTaskCard(t, opts){
     +     '<button class="btn primary" id="doneBtn">Done<small>that is one off the list</small></button>'
     +     '<button class="btn" id="skipBtn">'+esc(opts.secondLabel || "Not today")+'</button>'
     +   '</div>'
+    +   (opts.extra || "")
     + '</div>'
     + '<p class="lowkey">Stop whenever you want. Anything you do counts.</p>';
 
@@ -1013,6 +1056,14 @@ function wireListLink(){
    Friday does not mean clearing the whole day first to reach it. Still a link and
    not a tab: a permanent tab is a standing invitation to look at the pile. Falls
    back to the plain list link if no class has cards yet. */
+/* Shown on Today whenever PING_URL is set. The rule from the day this app was built:
+   sync is never silent. A kid with demand avoidance who discovers he was being measured
+   without being told stops opening the app, and then there is no data at all. */
+function syncNotice(){
+  if(!PING_URL) return "";
+  return '<p class="lowkey syncnote">Mom and dad can see how this is going.</p>';
+}
+
 function todayLinks(){
   var any = Object.keys(CLASSES).some(function(k){ return classCards(k).length > 0; });
   if(!any) return listLink();
@@ -1060,6 +1111,7 @@ function renderToday(){
     /* gone from the data, or already ticked off elsewhere: step past it */
     if(!t || TASKDONE[step.taskId]){ d.pos++; saveDay(); return renderToday(); }
     drawTaskCard(t, {
+      extra: taskSwitcher(t.id),
       secondLabel: "Not today",
       onDone: function(){
         d.doneCount++; d.pos++; saveDay();
@@ -1067,6 +1119,8 @@ function renderToday(){
       },
       onSecond: function(){ d.pos++; saveDay(); render(); }
     });
+    wireTaskSwitcher(d, step);
+    APP.insertAdjacentHTML("beforeend", syncNotice());
     APP.insertAdjacentHTML("beforeend", todayLinks());
     wireTodayLinks();
     return;
@@ -1086,6 +1140,7 @@ function renderToday(){
     +   '</div>'
     + '</div>'
     + '<p class="lowkey">Stop whenever you want. Anything you do counts.</p>';
+  APP.insertAdjacentHTML("beforeend", syncNotice());
   APP.insertAdjacentHTML("beforeend", todayLinks());
   $("#startBtn").addEventListener("click", function(){ startRound(k, true); });
   $("#skipBtn").addEventListener("click", function(){ d.pos++; saveDay(); render(); });
@@ -1293,7 +1348,28 @@ function renderPractice(){
    reports on Alex in the background. The "Show dad how it is going" screen exists so that the
    check-in happens without that. If you do decide you want passive visibility, set the URL AND
    add a visible line to the Today screen telling Alex it is on. Do not run it silently. */
-var PING_URL = "";
+var PING_URL = "https://script.google.com/macros/s/AKfycbxKn-CXg9HWwE8QqVnDMfOTw1KY_lMdQizvvm5kkBlNfm6Kbw9sUSRVzVeTdOV6NdSxPA/exec";
+var PING_KEY = "alexsem1";   /* must match KEY in the Apps Script */
+
+/* The whole picture in one object, so the parent page can show real numbers instead of
+   a stream of events. Sent with every ping; it is a few hundred bytes. */
+function snapshot(){
+  var done = TASKS.filter(function(t){ return !!TASKDONE[t.id]; });
+  var cls = Object.keys(CLASSES).filter(function(k){ return classCards(k).length > 0; })
+    .map(function(k){
+      var st = classStats(k);
+      return { name: CLASSES[k].name, known: st.mastered, total: st.total };
+    });
+  var total = 0, known = 0;
+  cls.forEach(function(c){ total += c.total; known += c.known; });
+  return {
+    tasksDone: done.length, tasksTotal: TASKS.length,
+    cardsKnown: known, cardsTotal: total,
+    classes: cls,
+    recent: done.slice(-3).reverse().map(function(t){ return t.title; })
+  };
+}
+
 function sessionId(){
   var s = readLS("s1Session", null);
   if(!s){ s = Math.random().toString(36).slice(2,10); writeLS("s1Session", s); }
@@ -1302,7 +1378,9 @@ function sessionId(){
 function ping(event, extra){
   if(!PING_URL) return;
   try{
-    var payload = { student:"Alex", event:event, day:todayKey(), session:sessionId() };
+    var payload = { key:PING_KEY, student:"Alex", event:event, day:todayKey(), session:sessionId() };
+    var snap = snapshot();
+    for(var sk in snap) payload[sk] = snap[sk];
     if(extra) for(var k in extra) payload[k] = extra[k];
     fetch(PING_URL, { method:"POST", mode:"no-cors",
       headers:{ "Content-Type":"text/plain;charset=utf-8" }, body:JSON.stringify(payload) });

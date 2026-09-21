@@ -75,6 +75,11 @@
   .newt{font-size:10.5px; font-weight:800; letter-spacing:.5px; background:var(--wt-line);
     color:#fff; border-radius:3px; padding:1px 6px}
   li.allrow a{opacity:.7; font-size:14.5px}
+  .crow{display:flex; align-items:center; gap:10px; font-size:13.5px; margin:7px 0}
+  .cname{flex:0 0 42%; font-weight:650}
+  .cbar{flex:1 1 auto; height:9px; background:#e7ebef; border-radius:99px; overflow:hidden}
+  .cbar i{display:block; height:100%; background:var(--wt-line); border-radius:99px}
+  .cnum{flex:0 0 auto; color:var(--muted); font-variant-numeric:tabular-nums; font-size:12.5px}
 </style><body><div class="sheet">
 <div class="asghead" style="margin-bottom:4px">
   <p class="eyebrow">Alex &middot; Semester 1</p>
@@ -84,6 +89,55 @@
 sized to fit the box. Grey text underneath is context for you, not for copying. Anything asking for
 his own opinion or a drawing is left to him and marked as his to supply.</p>
 <div class="grp"><h2>World History</h2><p class="who">Mr. Flores</p><ul class="k"><li><a href="keys/wh-buddhism-bumper-sticker.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>Buddhism Bumper Sticker</span></a></li><li><a href="keys/wh-christianity-reading.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>Christianity Reading</span></a></li><li><a href="keys/wh-hinduism-stations.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>Hinduism Stations</span><span class="newt">NEW</span></a></li><li><a href="keys/wh-origins-of-islam.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>Origins of Islam</span></a></li><li><a href="keys/wh-forms-of-govt-and-bears.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>Forms of Govt + Bears</span></a></li><li><a href="keys/wh-unit-1-geography.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>Unit 1 Geography, 6 maps</span></a></li><li class="allrow"><a href="keys/wh-ALL.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>All World History, one file</span></a></li></ul></div><div class="grp"><h2>Zoology</h2><p class="who">Mrs. Finch</p><ul class="k"><li><a href="keys/zoo-what-is-zoology-poster.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>“What is Zoology?” Poster</span></a></li><li><a href="keys/zoo-classification-venn.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>Classification + Venn Diagram</span></a></li><li><a href="keys/zoo-species-drawing-id1.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>Species Drawing, ID #1</span></a></li><li class="allrow"><a href="keys/zoo-ALL.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>All Zoology, one file</span></a></li></ul></div><div class="grp"><h2>Conceptual Chemistry</h2><p class="who">Mrs. Porter</p><ul class="k"><li><a href="keys/chem-msds-scaffold.pdf" target="_blank" rel="noopener"><span class="tag2">PDF</span><span>MSDS Project scaffold</span><span class="newt">NEW</span></a></li></ul></div>
+
+<div class="grp" id="prog" hidden>
+  <h2>How he is doing</h2>
+  <p class="who" id="progwhen"></p>
+  <p class="intro" id="progline" style="margin-top:4px"></p>
+  <div id="progclasses"></div>
+  <div id="progrecent"></div>
+</div>
+<p class="intro" id="progmiss" style="color:var(--faint)">Checking how he is doing...</p>
+<script>
+(function(){
+  var URL_BASE = "https://script.google.com/macros/s/AKfycbxKn-CXg9HWwE8QqVnDMfOTw1KY_lMdQizvvm5kkBlNfm6Kbw9sUSRVzVeTdOV6NdSxPA/exec";
+  window.__alexProgress = function(d){
+    var miss = document.getElementById('progmiss');
+    if(!d || !d.ok){ miss.textContent = "No activity recorded yet."; return; }
+    miss.style.display = 'none';
+    var box = document.getElementById('prog');
+    box.hidden = false;
+    var when = d.updated ? new Date(d.updated) : null;
+    document.getElementById('progwhen').textContent =
+      when ? ("Last opened " + when.toLocaleString()) : "";
+    document.getElementById('progline').innerHTML =
+      "<b>" + d.tasksDone + " of " + d.tasksTotal + "</b> assignments finished &middot; <b>"
+      + d.cardsKnown + " of " + d.cardsTotal + "</b> cards known";
+    var rows = (d.classes || []).map(function(c){
+      var pct = c.total ? Math.round(c.known / c.total * 100) : 0;
+      return '<div class="crow"><span class="cname">' + esc(c.name)
+           + '</span><span class="cbar"><i style="width:' + pct + '%"></i></span>'
+           + '<span class="cnum">' + c.known + '/' + c.total + '</span></div>';
+    }).join("");
+    document.getElementById('progclasses').innerHTML = rows;
+    var rec = (d.recent || []);
+    document.getElementById('progrecent').innerHTML = rec.length
+      ? '<p class="who" style="margin-top:12px">Most recently finished</p><ul class="k">'
+        + rec.map(function(t){ return '<li style="padding:7px 2px">' + esc(t) + '</li>'; }).join("")
+        + '</ul>'
+      : "";
+  };
+  function esc(s){ return String(s == null ? "" : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var sc = document.createElement('script');
+  sc.src = URL_BASE + (URL_BASE.indexOf('?') > -1 ? '&' : '?') + 'callback=__alexProgress';
+  sc.onerror = function(){
+    document.getElementById('progmiss').textContent = "Could not reach the progress sheet.";
+  };
+  document.head.appendChild(sc);
+})();
+</script>
+
 <footer>Built from the teachers' own files in Alex's Google Drive and Google Classroom.
 Every answer was generated from those files and then checked by a separate pass against the
 same source. This page is not linked from Alex's app.</footer>
