@@ -100,41 +100,44 @@ his own opinion or a drawing is left to him and marked as his to supply.</p>
 <p class="intro" id="progmiss" style="color:var(--faint)">Checking how he is doing...</p>
 <script>
 (function(){
-  var URL_BASE = "https://script.google.com/macros/s/AKfycbxKn-CXg9HWwE8QqVnDMfOTw1KY_lMdQizvvm5kkBlNfm6Kbw9sUSRVzVeTdOV6NdSxPA/exec";
-  window.__alexProgress = function(d){
-    var miss = document.getElementById('progmiss');
-    if(!d || !d.ok){ miss.textContent = "No activity recorded yet."; return; }
-    miss.style.display = 'none';
-    var box = document.getElementById('prog');
-    box.hidden = false;
-    var when = d.updated ? new Date(d.updated) : null;
-    document.getElementById('progwhen').textContent =
-      when ? ("Last opened " + when.toLocaleString()) : "";
-    document.getElementById('progline').innerHTML =
-      "<b>" + d.tasksDone + " of " + d.tasksTotal + "</b> assignments finished &middot; <b>"
-      + d.cardsKnown + " of " + d.cardsTotal + "</b> cards known";
-    var rows = (d.classes || []).map(function(c){
-      var pct = c.total ? Math.round(c.known / c.total * 100) : 0;
-      return '<div class="crow"><span class="cname">' + esc(c.name)
-           + '</span><span class="cbar"><i style="width:' + pct + '%"></i></span>'
-           + '<span class="cnum">' + c.known + '/' + c.total + '</span></div>';
-    }).join("");
-    document.getElementById('progclasses').innerHTML = rows;
-    var rec = (d.recent || []);
-    document.getElementById('progrecent').innerHTML = rec.length
-      ? '<p class="who" style="margin-top:12px">Most recently finished</p><ul class="k">'
-        + rec.map(function(t){ return '<li style="padding:7px 2px">' + esc(t) + '</li>'; }).join("")
-        + '</ul>'
-      : "";
-  };
+  var CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT7S102mwHt7_9X9Md3NNT6XtPe17XXMZ9WVQw0j6TYxoXiG-YCnwyiyWs-peERXUUr21fLeSXpBFqJ/pub?gid=1868753985&single=true&output=csv";
   function esc(s){ return String(s == null ? "" : s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  var sc = document.createElement('script');
-  sc.src = URL_BASE + (URL_BASE.indexOf('?') > -1 ? '&' : '?') + 'callback=__alexProgress';
-  sc.onerror = function(){
-    document.getElementById('progmiss').textContent = "Could not reach the progress sheet.";
-  };
-  document.head.appendChild(sc);
+  function fail(msg){ var m = document.getElementById('progmiss'); if(m) m.textContent = msg; }
+
+  fetch(CSV, { cache: "no-store" })
+    .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
+    .then(function(text){
+      /* The sheet holds one cell of JSON. CSV wraps it in quotes and doubles the
+         inner ones, so unwrap before parsing. */
+      var body = text.replace(/^[^
+]*
+/, "").trim();
+      if(body.charAt(0) === '"') body = body.slice(1, -1).replace(/""/g, '"');
+      if(!body) { fail("No activity recorded yet."); return; }
+      var d = JSON.parse(body);
+      document.getElementById('progmiss').style.display = 'none';
+      document.getElementById('prog').hidden = false;
+      var when = d.updated ? new Date(d.updated) : null;
+      document.getElementById('progwhen').textContent =
+        when ? ("Last opened " + when.toLocaleString()) : "";
+      document.getElementById('progline').innerHTML =
+        "<b>" + d.tasksDone + " of " + d.tasksTotal + "</b> assignments finished &middot; <b>"
+        + d.cardsKnown + " of " + d.cardsTotal + "</b> cards known";
+      document.getElementById('progclasses').innerHTML = (d.classes || []).map(function(c){
+        var pct = c.total ? Math.round(c.known / c.total * 100) : 0;
+        return '<div class="crow"><span class="cname">' + esc(c.name)
+             + '</span><span class="cbar"><i style="width:' + pct + '%"></i></span>'
+             + '<span class="cnum">' + c.known + '/' + c.total + '</span></div>';
+      }).join("");
+      var rec = d.recent || [];
+      document.getElementById('progrecent').innerHTML = rec.length
+        ? '<p class="who" style="margin-top:12px">Most recently finished</p><ul class="k">'
+          + rec.map(function(t){ return '<li style="padding:7px 2px">' + esc(t) + '</li>'; }).join("")
+          + '</ul>'
+        : "";
+    })
+    .catch(function(e){ fail("Could not reach the progress sheet (" + e.message + ")."); });
 })();
 </script>
 
